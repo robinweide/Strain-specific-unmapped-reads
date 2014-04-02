@@ -61,8 +61,8 @@ echo '!!!!!!!!!! Vipro !!!!!!!!!!'
 echo '0---   VIPRO  (>3900 reads or more) --------0' >> report_balfour.stats
 samtools view -S viral.sam -f 2 -F 4 | cut -f3 | sort | uniq -c | sort -nr >> report_balfour.stats
 #read -p "Vipro treshold? ( Check report )" VIPROTRES
-echo 'ViPro treshold is 20' >> report_balfour.stats
-samtools view -S viral.sam -f 2 -F 4 | cut -f3 | sort | uniq -c | awk '{if ($1 > 20) print $2}' > found_organisms
+echo 'ViPro treshold is 0 mapped pairs' >> report_balfour.stats
+samtools view -S viral.sam -f 2 -F 4 | cut -f3 | sort | uniq -c | awk '{if ($1 > 0) print $2}' > found_organisms
 if [ "$(wc -c <found_organisms)" -eq 0 ];then
 	echo "No found found_organisms. Use the _APE.fastq-files" 1>&2 
 	exit
@@ -73,21 +73,21 @@ samtools index viral_sorted.bam
 
 #used for per-microbe looping: old way
 ##################################################################
-perl /home/robin/bin/looper.pl
+# perl /home/robin/bin/looper.pl
 ##################################################################
 
 
 #new way to check out
 
 
-# filename='found_organisms'
-# filelines=`cat $filename`
-# echo Start
-# for line in $filelines ; do
-#     samtools view -h viral_sorted.bam $line > temp.sam
-#     samtools view -S -f 66 -F 4 temp.sam | awk '{print $1}' | sed 's/\$/\/1/' >> viral_mapped_readnames.lst
-#     samtools view -S -f 130 -F 4 temp.sam | awk '{print $1}' | sed 's/\$/\/2/' >> viral_mapped_readnames.lst
-# done
+filename='found_organisms'
+filelines=`cat $filename`
+echo Start
+for line in $filelines ; do
+    samtools view -h viral_sorted.bam $line > temp.sam
+    samtools view -S -f 66 -F 4 temp.sam | awk '{print $1}' | sed 's/\$/\/1/' >> viral_mapped_readnames.lst
+    samtools view -S -f 130 -F 4 temp.sam | awk '{print $1}' | sed 's/\$/\/2/' >> viral_mapped_readnames.lst
+done
 
 
 
