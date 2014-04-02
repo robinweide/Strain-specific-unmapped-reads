@@ -8,4 +8,5 @@ Here, a perl-wrapper is used to loop trough the shellscript. This shellscript ho
 
 Filtering of unmapped reads
 -----
-...
+
+The shell-script map-based_filtering-Celera,Ychr,ViPro.sh serves as a pipeline for the filtering of unmapped reads. It calls reads mapped, that properly map with their mate. At each of the mapping stages, two files are generated: the mapped and unmapped paired reads. It also writes to the report.txt (allready used by the extraction-script)
