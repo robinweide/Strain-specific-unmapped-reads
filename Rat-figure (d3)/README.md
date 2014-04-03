@@ -1,6 +1,6 @@
 Workflow for making the rat-figure
 ====================================
-![](images/screenshot.png?raw=true)
+![](screenshot.png?raw=true)
 Rat_docid.json has all rat-fields. A short snippet of this json:
 
 ```
