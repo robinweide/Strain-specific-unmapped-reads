@@ -1,7 +1,7 @@
 Workflow for making the rat-figure
 ====================================
 Rat_docid.json has all rat-fields. A short snippet of this json:
------------------------------------
+
 ```
 {"docs":[
    {
@@ -24,6 +24,6 @@ Rat_docid.json has all rat-fields. A short snippet of this json:
 ]}
 ```
 post json to couchdb-server
--------------------------------------
+```
 sudo curl -X POST -H "Content-Type: application/json" -d @/home/robin/Rat_docid.json http://student:hello@umcu-bioinf.is-not-certified.com/robin/_bulk_docs -v
-
+```
