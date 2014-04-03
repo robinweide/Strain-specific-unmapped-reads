@@ -4,7 +4,7 @@ Strain-donuts
 This makes donut-charts of all available _id's. There is mouse-over information per donut-slice.
 Workflow for making the rat-figure: local (.csv)
 ---------
-Rat_data.csv hold all rat-field. A shot snippet of this csv:
+Rat_data.csv holds all rat-fields. A short snippet of this csv:
 ```
 Strain,Split mapped,Low quality & length,Mapped Y,Contamination,Non-reference reads,Mapped Celera,Strain-specific reads
 Da/BklArbNsi,0.013331389,27.9059000593,49.5468500965,0.272537455,4.8796506815,17.3817303188,0
@@ -43,7 +43,7 @@ sudo curl -X POST -H "Content-Type: application/json" -d @/home/robin/Rat_docid.
 Workflow for making the scatter plot of Pjotr
 ---------
 ![](pjotr_screenshot.png?raw=true)
-This figure nog has serveral additions:
+This figure now has serveral additions:
 * Mouse-over functionality: returns tumor and normal value of a point.
 * logarithmic scales: for better visualisation
 * enhanced title and axes

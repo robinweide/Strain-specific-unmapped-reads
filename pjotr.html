@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 11px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.dot {
+  stroke: #000;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+
+<script>
+
+var xdata = [];
+var ydata = []; 
+var labels = [];
+
+function fetch_data() {
+  return $.ajax({
+   url: 'http://student:hello@umcu-bioinf.is-not-certified.com/test/_design/all/_view/all',
+   type: 'GET',
+   dataType: 'jsonp',
+   cache: false,
+   crossDomain: true,
+   }).done( function(data) {
+     console.log(data);
+     // console.log("First normal ",data.rows[0].value.normal);
+     // console.log("First tumor  ",data.rows[0].value.tumor)
+     for (i in data.rows) {
+       // console.log(i,"normal: ",data.rows[i].value.normal);
+       xdata.push(data.rows[i].value.tumor);
+       ydata.push(data.rows[i].value.normal);
+       labels.push(data.rows[i]._id); 
+     } 
+     // console.log(xdata);
+})};
+
+// Global initialisations
+
+var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var x = d3.scale.log()
+    .range([0, width]);
+
+var y = d3.scale.log()
+    .range([height, 0]);
+
+var color = d3.scale.category10();
+
+// the chart object, includes all margins
+var chart = d3.select('body')
+  .append('svg:svg')
+  .attr('width', width + margin.right + margin.left)
+  .attr('height', height + margin.top + margin.bottom)
+  .attr('class', 'chart')
+
+// the main object where the chart and axis will be drawn
+var main = chart.append('g')
+  .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+  .attr('width', width)
+  .attr('height', height)
+  .attr('class', 'main') ;
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+xdata.length = 0;
+ydata.length = 0;
+
+var rescale = function() {
+  x = d3.scale.log()
+            .domain([1, d3.max(xdata)])  // the range of the values to plot
+            .range([ 0, width ]);        // the pixel range of the x-axis
+
+  y = d3.scale.log()
+            .domain([1, d3.max(ydata)])
+            .range([ height, 0 ]);
+
+  // redraw the x axis
+  var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient('bottom');
+
+  main.append('g')
+  .attr('transform', 'translate(0,' + height + ')')
+  .attr('class', 'main axis date')
+  .style({ 'stroke': 'Black', 'fill': 'Black', 'stroke-width': '1px', 'text' : 'hoi'})
+  .call(xAxis);
+
+  // redraw the y axis
+  var yAxis = d3.svg.axis()
+  .scale(y)
+  .orient('left');
+
+  main.append('g')
+    .attr('transform', 'translate(0,0)')
+    .attr('class', 'main axis date')
+    .style({ 'stroke': 'Black', 'fill': 'none', 'stroke-width': '1px'})
+    .call(yAxis);
+}
+
+var refresh = function() {
+
+ //Create Title 
+  main.append("text")
+    .attr("x", width / 2 )
+    .attr("y", -10)
+    .style("text-anchor", "middle")
+    .text("Tumor vs. Normal");
+
+  var dots = g.selectAll("scatter-dots")
+    .data(ydata)  // using the values in the ydata array
+    .enter().append("svg:circle")  // create a new circle for each value
+        .attr("cy", function (d) { return y(d); } ) // translate y value to a pixel
+        .attr("cx", function (d,i) { return x(xdata[i]); } ) // translate x value
+        .attr("r",2) // radius of circle
+        .attr("fill", function(d,i) { return color.range()[10]; }) 
+        .append("svg:title")
+        .text(function(d, i) { return "Tumor: " + x(xdata[i]) + "\n" + "Normal: " + y(ydata[i]); })
+        .style("opacity", 1); // opacity of circle
+        // .text(function(d,i) { return labels[i]; })
+}  
+
+var g = main.append("svg:g"); 
+
+$.when( fetch_data() )
+  .then( function() { 
+    console.log('Total tumor-normal pairs: ',xdata.length) ; 
+    rescale();
+    refresh()
+  } );
+
+</script>
