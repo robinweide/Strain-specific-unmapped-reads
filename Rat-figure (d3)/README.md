@@ -2,7 +2,16 @@ Strain-donuts
 ====================================
 ![](screenshot.png?raw=true)
 This makes donut-charts of all available _id's. There is mouse-over information per donut-slice.
-Workflow for making the rat-figure
+Workflow for making the rat-figure: local (.csv)
+---------
+Rat_data.csv hold all rat-field. A shot snippet of this csv:
+```
+Strain,Split mapped,Low quality & length,Mapped Y,Contamination,Non-reference reads,Mapped Celera,Strain-specific reads
+Da/BklArbNsi,0.013331389,27.9059000593,49.5468500965,0.272537455,4.8796506815,17.3817303188,0
+F344/NCrl,0.0020170836,26.8085849336,36.6673559791,0.0052116035,18.4008912748,9.0579695627,9.0579695627
+```
+Runnning the d3-based html-script "rat_figure-local.html" will then create the figure.
+Workflow for making the rat-figure: noSQL
 ---------
 Rat_docid.json has all rat-fields. A short snippet of this json:
 
