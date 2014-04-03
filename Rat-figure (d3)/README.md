@@ -1,11 +1,9 @@
-Workflow for making the rat-figure
+Strain-donuts
 ====================================
 ![](screenshot.png?raw=true)
 This makes donut-charts of all available _id's. There is mouse-over information per donut-slice.
+Workflow for making the rat-figure
 ---------
-
-
-
 Rat_docid.json has all rat-fields. A short snippet of this json:
 
 ```
