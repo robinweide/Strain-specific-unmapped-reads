@@ -1,0 +1,132 @@
+{"docs":[
+   {
+      "_id":"Da/BklArbNsi",
+      "Split mapped":0.013331389,
+      "Low quality & length":27.9059000593,
+      "Mapped Y":49.5468500965,
+      "Contamination":0.272537455,
+      "Non-reference reads":4.8796506815,
+      "Mapped Celera":17.3817303188,
+      "Strain-specific reads":0
+   },
+   {
+      "_id":"F344/NCrl",
+      "Split mapped":0.0020170836,
+      "Low quality & length":26.8085849336,
+      "Mapped Y":36.6673559791,
+      "Contamination":0.0052116035,
+      "Non-reference reads":18.4008912748,
+      "Mapped Celera":9.0579695627,
+      "Strain-specific reads":9.0579695627
+   },
+   {
+      "_id":"F344/NHsd",
+      "Split mapped":0.0110033938,
+      "Low quality & length":30.7019426868,
+      "Mapped Y":56.4404282466,
+      "Contamination":0.4821853395,
+      "Non-reference reads":5.5228169733,
+      "Mapped Celera":3.42081168,
+      "Strain-specific reads":3.42081168
+   },
+   {
+      "_id":"FHH/EurMcwi",
+      "Split mapped":0.0020195727,
+      "Low quality & length":39.8914269148,
+      "Mapped Y":30.9551949449,
+      "Contamination":1.8580920304,
+      "Non-reference reads":14.7440312049,
+      "Mapped Celera":6.2746176662,
+      "Strain-specific reads":6.2746176662
+   },
+   {
+      "_id":"FHL/EurMcwi",
+      "Split mapped":0.0027073769,
+      "Low quality & length":34.106122953,
+      "Mapped Y":24.8999229786,
+      "Contamination":0.8217313198,
+      "Non-reference reads":12.8237125985,
+      "Mapped Celera":13.6729013866,
+      "Strain-specific reads":13.6729013866
+   },
+   {
+      "_id":"Le/Stm",
+      "Split mapped":0.0064667845,
+      "Low quality & length":40.6649542124,
+      "Mapped Y":33.0636553807,
+      "Contamination":3.9649353721,
+      "Non-reference reads":5.1721508181,
+      "Mapped Celera":15.4650012408,
+      "Strain-specific reads":1.6628361914
+   },
+   {
+      "_id":"LEW/Crl",
+      "Split mapped":0.0009777467,
+      "Low quality & length":52.1908730167,
+      "Mapped Y":28.2009250833,
+      "Contamination":0.0027665787,
+      "Non-reference reads":10.3381301366,
+      "Mapped Celera":4.6331637191,
+      "Strain-specific reads":4.6331637191
+   },
+   {
+      "_id":"LEW/NCrlBR",
+      "Split mapped":0.0006503694,
+      "Low quality & length":41.7501936544,
+      "Mapped Y":27.1302094469,
+      "Contamination":10.7344063308,
+      "Non-reference reads":8.4542326152,
+      "Mapped Celera":5.9651537916,
+      "Strain-specific reads":5.9651537916
+   },
+   {
+      "_id":"LH/MavRrrc",
+      "Split mapped":0.0015599805,
+      "Low quality & length":52.6675638045,
+      "Mapped Y":17.3750721709,
+      "Contamination":0.3029482209,
+      "Non-reference reads":11.803246486,
+      "Mapped Celera":12.3141030749,
+      "Strain-specific reads":5.5355062622
+   },
+   {
+      "_id":"SHR/NHsd",
+      "Split mapped":0.0012728334,
+      "Low quality & length":53.4963243983,
+      "Mapped Y":29.869961897,
+      "Contamination":0.0039514829,
+      "Non-reference reads":8.9445079964,
+      "Mapped Celera":3.841990696,
+      "Strain-specific reads":3.841990696
+   },
+   {
+      "_id":"SHR/OlaIpcv",
+      "Split mapped":0.0032868785,
+      "Low quality & length":94.0495682263,
+      "Mapped Y":4.7019563737,
+      "Contamination":0.3958238878,
+      "Non-reference reads":0.4166663305,
+      "Mapped Celera":0.2163491516,
+      "Strain-specific reads":0.2163491516
+   },
+   {
+      "_id":"WKY/Gla",
+      "Split mapped":0.0021501558,
+      "Low quality & length":11.641005595,
+      "Mapped Y":29.2084740787,
+      "Contamination":0.9644746976,
+      "Non-reference reads":22.7651898816,
+      "Mapped Celera":24.1091563742,
+      "Strain-specific reads":11.3095492171
+   },
+   {
+      "_id":"WKY/NCrl",
+      "Split mapped":0.0017744005,
+      "Low quality & length":46.2551940976,
+      "Mapped Y":25.8055714102,
+      "Contamination":0.3398943133,
+      "Non-reference reads":10.1707133273,
+      "Mapped Celera":11.9203871351,
+      "Strain-specific reads":5.506465316
+   }
+]}
