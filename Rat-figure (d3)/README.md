@@ -40,3 +40,13 @@ post json to couchdb-server
 ```
 sudo curl -X POST -H "Content-Type: application/json" -d @/home/robin/Rat_docid.json http://student:hello@umcu-bioinf.is-not-certified.com/robin/_bulk_docs -v
 ```
+Workflow for making the scatter plot of Pjotr
+---------
+![](pjotr_screenshot.png?raw=true)
+This figure nog has serveral additions:
+* Mouse-over functionality: returns tumor and normal value of a point.
+* logarithmic scales: for better visualisation
+* enhanced title and axes
+```
+pjotr.html
+```
