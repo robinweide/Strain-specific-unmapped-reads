@@ -6,7 +6,7 @@ INPUTFILE=`basename $1`
 INPUTDIR=`dirname $1`
 
 #uncomment following line for perl-style loops
-#cd $4
+cd $4
 echo '!!!!!!!!!! CELERA !!!!!!!!!!'
 bedtools bamtofastq -i $1 -fq all.fastq
 sed  '/^[@]'$2'/ s/\/[12]$//' 1_${INPUTFILE%%.*}_PINDELUNMAPPED_trimmed_singletons.fastq > s_empty.fq
@@ -129,16 +129,11 @@ rm unmapped_headers.lst
 rm viral.sam
 
 
-pbzip2 1_ACI_EurMcwi_PE1__dedup_realigned_bqsr_PINDELUNMAPPED_trimmed_readpairs.fastq
-pbzip2 1_ACI_EurMcwi_PE1__dedup_realigned_bqsr_PINDELUNMAPPED_trimmed_singletons.fastq
-C_ACI_EurMcwi_PE1__dedup_realigned_bqsr_PINDELUNMAPPED_trimmed_Celera.fastq
-found_organisms
-pbzip2 nC_ACI_EurMcwi_PE1__dedup_realigned_bqsr_PINDELUNMAPPED_trimmed_nonCelera.fastq
-pbzip2 nY_ACI_EurMcwi_PE1__dedup_realigned_bqsr_PINDELUNMAPPED_trimmed_nonCelera_nonY.fastq
-report_balfour.stats
-Y_ACI_EurMcwi_PE1__dedup_realigned_bqsr_PINDELUNMAPPED_trimmed_nonCelera_Y.fastq
-
+pbzip2 1_${INPUTFILE%%.*}_PINDELUNMAPPED_trimmed_readpairs.fastq
+pbzip2 1_${INPUTFILE%%.*}_PINDELUNMAPPED_trimmed_singletons.fastq
+pbzip2 nC_${INPUTFILE%%.*}_PINDELUNMAPPED_trimmed_nonCelera.fastq
+pbzip2 nY_${INPUTFILE%%.*}_PINDELUNMAPPED_trimmed_nonCelera_nonY.fastq
 
 
 # uncomment for perl-style loop
-#cd ..
+cd ..
