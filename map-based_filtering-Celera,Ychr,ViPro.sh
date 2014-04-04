@@ -109,5 +109,36 @@ echo '0---   Unmapped filtered non-split filtered non-celera non-Y V:' >> report
 /home/robin/bin/fasta_utilities/ea-utils.1.1.2-537/fastq-stats  V_${INPUTFILE%%.*}_PINDELUNMAPPED_trimmed_nonCelera_nonY_V.fastq >> report_balfour.stats
 echo '0---   ' >> report_balfour.stats
 echo '0---   ' >> report_balfour.stats
+
+
+
+# clean-up
+rm ${INPUTFILE%%.*}*
+rm all.fastq
+rm C.fastq
+rm Cu.fastq
+rm empty.fastq
+rm mapped_to_celera.bam
+rm nameA.lst
+rm name.lst
+rm nameM.lst
+rm ready_for_celera_mapping.fastq
+rm r_empty.fq
+rm s_empty.fq
+rm unmapped_headers.lst
+rm viral.sam
+
+
+pbzip2 1_ACI_EurMcwi_PE1__dedup_realigned_bqsr_PINDELUNMAPPED_trimmed_readpairs.fastq
+pbzip2 1_ACI_EurMcwi_PE1__dedup_realigned_bqsr_PINDELUNMAPPED_trimmed_singletons.fastq
+C_ACI_EurMcwi_PE1__dedup_realigned_bqsr_PINDELUNMAPPED_trimmed_Celera.fastq
+found_organisms
+pbzip2 nC_ACI_EurMcwi_PE1__dedup_realigned_bqsr_PINDELUNMAPPED_trimmed_nonCelera.fastq
+pbzip2 nY_ACI_EurMcwi_PE1__dedup_realigned_bqsr_PINDELUNMAPPED_trimmed_nonCelera_nonY.fastq
+report_balfour.stats
+Y_ACI_EurMcwi_PE1__dedup_realigned_bqsr_PINDELUNMAPPED_trimmed_nonCelera_Y.fastq
+
+
+
 # uncomment for perl-style loop
 #cd ..
