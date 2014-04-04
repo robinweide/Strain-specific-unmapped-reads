@@ -65,6 +65,7 @@ echo 'ViPro treshold is 0 mapped pairs' >> report_balfour.stats
 samtools view -S viral.sam -f 2 -F 4 | cut -f3 | sort | uniq -c | awk '{if ($1 > 0) print $2}' > found_organisms
 if [ "$(wc -c <found_organisms)" -eq 0 ];then
 	echo "No found found_organisms. Use the _APE.fastq-files" 1>&2 
+	cp nY_${INPUTFILE%%.*}_PINDELUNMAPPED_trimmed_nonCelera_nonY.fastq nV_${INPUTFILE%%.*}_PINDELUNMAPPED_trimmed_nonCelera_nonY_nonV.fastq
 	exit
 fi
 samtools view -bS -f 2 -F 4 viral.sam > viral.bam
