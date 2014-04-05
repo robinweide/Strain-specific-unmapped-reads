@@ -34,6 +34,7 @@ echo '0---   Unmapped filtered non-split filtered celera:' >> report_balfour.sta
 /home/robin/bin/fasta_utilities/ea-utils.1.1.2-537/fastq-stats  C_${INPUTFILE%%.*}_PINDELUNMAPPED_trimmed_Celera.fastq >> report_balfour.stats
 echo '0---   ' >> report_balfour.stats
 echo '0---   ' >> report_balfour.stats
+mv ${INPUTFILE%%.*}_Celera_proper_mapped.bam properly_mapped_to_celera.bam
 # ===================================================================================================================================YYY
 echo '!!!!!!!!!! Ychr !!!!!!!!!!'
 /home/robin/bin/bwa-0.7.5a/bwa mem -R '@RG\tID:${INPUTFILE%%.*}\tSM:${INPUTFILE%%.*}' -M -p /data_fedor12/robin/databases/YchrBAC/YchrBAC.fasta nC_${INPUTFILE%%.*}_PINDELUNMAPPED_trimmed_nonCelera.fastq > ${INPUTFILE%%.*}_YYY.sam
