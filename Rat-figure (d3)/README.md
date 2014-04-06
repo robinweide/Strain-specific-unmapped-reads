@@ -44,9 +44,10 @@ Workflow for making the scatter plot of Pjotr
 ---------
 ![](pjotr_screenshot.png?raw=true)
 This figure now has serveral additions:
-* Mouse-over functionality: returns tumor and normal value of a point.
-* logarithmic scales: for better visualisation
-* enhanced title and axes
+* Mouse-over functionality: returns tumor and normal value of a point and percentage difference between the two
+* Logarithmic scales for better visualisation
+* Enhanced title and axes-labels
+* Color-coding: ggplot2-like color for samples with more than 1-fold difference
 ```
 pjotr.html
 ```
