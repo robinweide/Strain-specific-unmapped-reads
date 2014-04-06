@@ -2,8 +2,19 @@
 <meta charset="utf-8">
 <style>
 
-body {
-  font: 11px sans-serif;
+body {font-size:10px;
+  font-family:"Times New Roman", Times, serif;
+}
+div.tooltip {   
+  position: absolute;           
+  text-align: left;           
+  width: 88px;                  
+  height: 38px;                 
+  padding: 2px;                   
+  background: #E3E3E3;   
+  border: 1px;      
+  border-radius: 0px;           
+  pointer-events: none;         
 }
 
 .axis path,
@@ -50,7 +61,7 @@ function fetch_data() {
 
 // Global initialisations
 
-var margin = {top: 20, right: 20, bottom: 30, left: 40},
+var margin = {top: 50, right: 50, bottom: 50, left: 50},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -61,6 +72,8 @@ var y = d3.scale.log()
     .range([height, 0]);
 
 var color = d3.scale.category10();
+
+
 
 // the chart object, includes all margins
 var chart = d3.select('body')
@@ -84,6 +97,10 @@ var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left");
 
+var div = d3.select("body").append("div")   
+    .attr("class", "tooltip")               
+    .style("opacity", 0);
+
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -102,6 +119,18 @@ var rescale = function() {
             .domain([1, d3.max(ydata)])
             .range([ height, 0 ]);
 
+  x2 = d3.scale.linear()
+            .domain([ 0, width ])        
+            .range([0, d3.max(xdata)]); 
+
+  y2 = d3.scale.linear()
+            .domain([ height, 0 ])
+            .range([0, d3.max(ydata)]);
+
+
+
+
+
   // redraw the x axis
   var xAxis = d3.svg.axis()
     .scale(x)
@@ -110,8 +139,15 @@ var rescale = function() {
   main.append('g')
   .attr('transform', 'translate(0,' + height + ')')
   .attr('class', 'main axis date')
-  .style({ 'stroke': 'Black', 'fill': 'Black', 'stroke-width': '1px', 'text' : 'hoi'})
-  .call(xAxis);
+  .style({ 'stroke': 'none', 'fill': 'Black', 'stroke-width': '1px', 'text' : 'hoi'})
+  .call(xAxis)
+  .append("text") 
+    .attr("class", "label")
+  .attr("x", width)
+  .attr("y", -10)
+  .style("text-anchor", "end")
+  .text("Tumor expression (log)") 
+
 
   // redraw the y axis
   var yAxis = d3.svg.axis()
@@ -121,8 +157,14 @@ var rescale = function() {
   main.append('g')
     .attr('transform', 'translate(0,0)')
     .attr('class', 'main axis date')
-    .style({ 'stroke': 'Black', 'fill': 'none', 'stroke-width': '1px'})
-    .call(yAxis);
+  .style({ 'stroke': 'none', 'fill': 'Black', 'stroke-width': '1px', 'text' : 'hoi'})
+    .call(yAxis)
+    .append("text") // Title Y-axis
+    .attr("class", "label")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 15)
+    .style("text-anchor", "end")
+    .text("Healthy expression (log)") 
 }
 
 var refresh = function() {
@@ -132,19 +174,43 @@ var refresh = function() {
     .attr("x", width / 2 )
     .attr("y", -10)
     .style("text-anchor", "middle")
-    .text("Tumor vs. Normal");
+    .attr("font-size", "22px")
+    .text("Tumor vs. Normal Expression Levels");
 
   var dots = g.selectAll("scatter-dots")
     .data(ydata)  // using the values in the ydata array
     .enter().append("svg:circle")  // create a new circle for each value
         .attr("cy", function (d) { return y(d); } ) // translate y value to a pixel
         .attr("cx", function (d,i) { return x(xdata[i]); } ) // translate x value
-        .attr("r",2) // radius of circle
-        .attr("fill", function(d,i) { return color.range()[10]; }) 
-        .append("svg:title")
-        .text(function(d, i) { return "Tumor: " + x(xdata[i]) + "\n" + "Normal: " + y(ydata[i]); })
-        .style("opacity", 1); // opacity of circle
-        // .text(function(d,i) { return labels[i]; })
+        .attr("r",1.5) // radius of circle
+        .attr("fill", function(d,i) { if ( (x(xdata[i]) - y(ydata[i]))/y(ydata[i]) < -0.5 ) {return d3.rgb(0, 191, 196);} else if ( (x(xdata[i]) - y(ydata[i]))/y(ydata[i]) > 0.5 ) {return d3.rgb(248, 118, 109);} else {return d3.rgb(227, 227, 227);}
+
+      }) 
+        // .append("svg:title")
+        // .text(function(d, i) { return "Tumor: " + x(xdata[i]) + "\n" + "Normal: " + y(ydata[i]); })
+        // .style("opacity", 1); // opacity of circle
+ .on("mouseover", function(d,i) { 
+    d3.select(this)
+      .transition()
+      // .style("fill", "#e8f00c")
+      // .attr("r", 12)
+      // .style('fill-opacity', '0.75');
+    div.transition()        
+      .duration(200)      
+      .style("opacity", 1);      
+    div .html("Tumor: " + (Math.round(x(xdata[i])* 100) / 100) + "<br/>" + "Healthy: " + (Math.round(y(ydata[i])* 100) / 100) + "<br/>"  + "Difference: " + (Math.round(((x(xdata[i]) - y(ydata[i]))/y(ydata[i])*100)* 100) / 100) + "%")  
+      .style("left", (d3.event.pageX + 15) + "px")     
+      .style("top", (d3.event.pageY - 35) + "px"); })
+.on("mouseout", function(d,i) {
+    // d3.select(this)
+    //   .transition()
+    //   .style("fill", function(d,i) { return d3.rgb(255 * x2(d3.event.pageX) / (y2(d3.event.pageY - 50)), 0, 255 * (y2(d3.event.pageY - 50)) / x2(d3.event.pageX) ); })
+    //   .attr("r", 4)
+    //   .style('fill-opacity', '1');     
+    // div.transition()        
+    //   .duration(500)      
+    //   .style("opacity", 0);  
+  })
 }  
 
 var g = main.append("svg:g"); 
@@ -156,4 +222,6 @@ $.when( fetch_data() )
     refresh()
   } );
 
-</script>
+
+
+  </script>
