@@ -119,7 +119,6 @@ rm all.fastq
 rm C.fastq
 rm Cu.fastq
 rm empty.fastq
-rm mapped_to_celera.bam
 rm nameA.lst
 rm name.lst
 rm nameM.lst
