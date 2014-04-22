@@ -27,5 +27,5 @@ foreach my $QUERY (@QUERY){
         `wc \-l readnames\-eve\_celera\.lst \>\> report\_balfour\.stats`;
 
         print $values[3]." is done\n";
-        system("cd ..");
+        chdir "..";
 }
