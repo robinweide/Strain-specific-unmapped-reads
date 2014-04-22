@@ -17,7 +17,7 @@ foreach my $QUERY (@QUERY){
         my @values = split(/\t/,$QUERY);
         chomp $values[3];
         print $values[3];
-        system("cd "$values[3]);
+        system("cd $values[3]");
         system("bedtools intersect -wa -u -abam properly_mapped_to_celera.bam -b /data_fedor12/robin/databases/EVE/mappingC/EVE_mapped-to-Celera_overlapped.bed > reads_celera_eve.bam");
         system("samtools view reads_celera_eve.bam | awk '{print $1}' | sort | uniq > readnames-eve_celera.lst");
         system("samtools view properly_mapped_to_celera.bam | awk '{print $1}' | sort | uniq > all_celera_reads.lst");
