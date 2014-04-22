@@ -19,11 +19,11 @@ foreach my $QUERY (@QUERY){
         print $values[3];
         print "cd ".$values[3]."\n";
         system("cd ".$values[3]);
-        system("bedtools intersect -wa -u -abam properly_mapped_to_celera.bam -b /data_fedor12/robin/databases/EVE/mappingC/EVE_mapped-to-Celera_overlapped.bed > reads_celera_eve.bam");
-        system("samtools view reads_celera_eve.bam | awk '{print $1}' | sort | uniq > readnames-eve_celera.lst");
-        system("samtools view properly_mapped_to_celera.bam | awk '{print $1}' | sort | uniq > all_celera_reads.lst");
-        system("wc -l all_celera_reads.lst >> report_balfour.stats");
-        system("wc -l readnames-eve_celera.lst >> report_balfour.stats");
+        system("bedtools intersect \-wa \-u \-abam properly\_mapped\_to\_celera\.bam \-b \/data\_fedor12\/robin\/databases\/EVE\/mappingC\/EVE\_mapped\-to\-Celera\_overlapped\.bed \> reads\_celera\_eve\.bam");
+        system("samtools view reads\_celera\_eve\.bam \| awk \'\{print \$1\}\' \| sort \| uniq \> readnames\-eve\_celera\.lst");
+        system("samtools view properly\_mapped\_to\_celera\.bam \| awk \'\{print \$1\}\' \| sort \| uniq \> all\_celera\_reads\.lst");
+        system("wc \-l all\_celera\_reads\.lst \>\> report\_balfour\.stats");
+        system("wc \-l readnames\-eve\_celera\.lst \>\> report\_balfour\.stats");
         print $values[3]." is done\n";
         system("cd ..");
 }
