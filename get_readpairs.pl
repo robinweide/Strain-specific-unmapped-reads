@@ -29,7 +29,7 @@ foreach my $QUERY (@QUERY){
                 `bedtools bamtofastq \-i $values[0] \-fq all\.fastq`;
         }
         `grep \-o \"$values[1]\[\^    \]\*\" nY\_\*\.fastq \| sort \| uniq \| sed \'s\/\^\@\/\/\' \> nameA\.lst`;
-        `seqtk subseq all\.fastq name\.lst \> ready\_for\_denovo\.fastq`;
+        `seqtk subseq all\.fastq nameA\.lst \> ready\_for\_denovo\.fastq`;
         print $values[3]." is done\n";
         chdir "..";
 }
