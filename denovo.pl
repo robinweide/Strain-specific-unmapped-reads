@@ -15,6 +15,7 @@ foreach my $QUERY (@QUERY){
         chomp $values[0];
         print $values[0]." has begun!\n";
         #print "cd ".$values[3]."\n";
+        `mkdir $values[0]`;
         chdir($values[0]);
 
 `echo $values[3] \> reads\.lst`;
