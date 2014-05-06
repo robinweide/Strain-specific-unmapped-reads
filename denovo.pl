@@ -19,16 +19,21 @@ foreach my $QUERY (@QUERY){
         `mkdir $values[0]`;
         chdir($values[0]);
 
-`echo $values[3] \> reads\.lst`;
-`echo $values[1] \>\> reads\.lst`;
-`echo $values[2] \>\> reads\.lst`;
+`cp $values[3] S.fq`;
+`cp $values[1] P1.fq`;
+`cp $values[2] P2.fq`;
+
+
+`echo S.fq \> reads\.lst`;
+`echo P1.fq \>\> reads\.lst`;
+`echo P2.fq \>\> reads\.lst`;
 
 `\/home\/robin\/bin\/SOAPec\_v2\.01\/bin\/KmerFreq\_HA \-t 10 \-p $values[0] \-l reads\.lst \>SOAPECkmerfreq\.log 2\>SOAPECkmerfreq\.err`;
 `\/home\/robin\/bin\/SOAPec\_v2\.01\/bin\/Corrector\_HA \-t 10 \-j 0 \-o 3 \-q 30 $values[0]\.freq\.gz reads\.lst \>SOAPECcorr\.log`;
-`perl \/home\/robin\/bin\/AddPairedEndSuffix\.pl $values[3]\.cor\.fq $values[3]\_1\.cor\.fq 1`;
-`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=$values[1]\.cor\.fq OUTPUT\=$values[1]\.sam SAMPLE\_NAME\=$values[0]`;
-`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=$values[2]\.cor\.fq OUTPUT\=$values[2]\.sam SAMPLE\_NAME\=$values[0]`;
-`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=$values[3]\_1\.cor\.fq OUTPUT\=$values[3]\.sam SAMPLE\_NAME\=$values[0]`;
+`perl \/home\/robin\/bin\/AddPairedEndSuffix\.pl S\.cor\.fq S\_1\.cor\.fq 1`;
+`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=P1\.cor\.fq OUTPUT\=$values[1]\.sam SAMPLE\_NAME\=$values[0]`;
+`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=P2\.cor\.fq OUTPUT\=$values[2]\.sam SAMPLE\_NAME\=$values[0]`;
+`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=S\_1\.cor\.fq OUTPUT\=$values[3]\.sam SAMPLE\_NAME\=$values[0]`;
 `java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/MergeSamFiles\.jar INPUT\=$values[1]\.sam INPUT\=$values[2]\.sam INPUT\=$values[3]\.sam OUTPUT\=$values[0]\_MERGED\.sam SORT\_ORDER\=queryname`;
 `perl \/home\/robin\/bin\/UnmappedBamToFastq\.pl $values[0]\_MERGED\.sam $values[0]\_Unmapped`;
 `#cat $values[3]\.cor\.fq \>\> $values[0]\_Unmapped\.fastq`;
@@ -66,4 +71,4 @@ foreach my $QUERY (@QUERY){
 
     my $end_run = time();
 my $run_time = $end_run - $start_run;
-print "Job started at $start_run \n Job ended at $end_run\nJob took $run_time seconds\n";
+print "Job took $run_time seconds\n";
