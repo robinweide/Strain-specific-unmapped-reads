@@ -7,6 +7,7 @@ open(INFILE, "$ARGV[0]");
 my @QUERY = <INFILE>;
 close INFILE;
 
+my $start_run = time();
 
 foreach my $QUERY (@QUERY){
         chomp $QUERY;
@@ -66,4 +67,8 @@ foreach my $QUERY (@QUERY){
 
         print $values[0]." is done\n";
         chdir "..";
-}
+    }
+
+    my $end_run = time();
+my $run_time = $end_run - $start_run;
+print "Job started at $start_run \n Job ended at $end_run\nJob took $run_time seconds\n";
