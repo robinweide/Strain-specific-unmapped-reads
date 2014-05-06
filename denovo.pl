@@ -59,11 +59,6 @@ foreach my $QUERY (@QUERY){
 `\/home\/robin\/bin\/GapCloser\/GapCloser \-b $values[0]\.config \-a $values[0]\.scafSeq \-o $values[0]\_gapcloser \-t 10`;
 
 `python \/home\/robin\/bin\/quast\-2\.3\/quast\.py $values[0]\_gapcloser \-T 10 \-o quast\_scaffold`;
-`rm histograms\*`;
-`rm kmergenie\.fq `;
-`rm reads\.lst\*`;
-
-
 
         print $values[0]." is done\n";
         chdir "..";
