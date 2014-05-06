@@ -24,10 +24,10 @@ foreach my $QUERY (@QUERY){
 `\/home\/robin\/bin\/SOAPec\_v2\.01\/bin\/KmerFreq\_HA \-t 10 \-p $values[0] \-l reads\.lst \>SOAPECkmerfreq\.log 2\>SOAPECkmerfreq\.err`;
 `\/home\/robin\/bin\/SOAPec\_v2\.01\/bin\/Corrector\_HA \-t 10 \-j 0 \-o 3 \-q 30 $values[0]\.freq\.gz reads\.lst \>SOAPECcorr\.log`;
 `perl \/home\/robin\/bin\/AddPairedEndSuffix\.pl $values[3]\.cor\.fq $values[3]\_1\.cor\.fq 1`;
-`java \-Xmx2g \-jar \/home\/robin\/bin\/picard\-tools\-1\.98\/FastqToSam\.jar FASTQ\=$values[1]\.cor\.fq OUTPUT\=$values[1]\.sam SAMPLE\_NAME\=$values[0]`;
-`java \-Xmx2g \-jar \/home\/robin\/bin\/picard\-tools\-1\.98\/FastqToSam\.jar FASTQ\=$values[2]\.cor\.fq OUTPUT\=$values[2]\.sam SAMPLE\_NAME\=$values[0]`;
-`java \-Xmx2g \-jar \/home\/robin\/bin\/picard\-tools\-1\.98\/FastqToSam\.jar FASTQ\=$values[3]\_1\.cor\.fq OUTPUT\=$values[3]\.sam SAMPLE\_NAME\=$values[0]`;
-`java \-Xmx2g \-jar \/home\/robin\/bin\/picard\-tools\-1\.98\/MergeSamFiles\.jar INPUT\=$values[1]\.sam INPUT\=$values[2]\.sam INPUT\=$values[3]\.sam OUTPUT\=$values[0]\_MERGED\.sam SORT\_ORDER\=queryname`;
+`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=$values[1]\.cor\.fq OUTPUT\=$values[1]\.sam SAMPLE\_NAME\=$values[0]`;
+`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=$values[2]\.cor\.fq OUTPUT\=$values[2]\.sam SAMPLE\_NAME\=$values[0]`;
+`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=$values[3]\_1\.cor\.fq OUTPUT\=$values[3]\.sam SAMPLE\_NAME\=$values[0]`;
+`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/MergeSamFiles\.jar INPUT\=$values[1]\.sam INPUT\=$values[2]\.sam INPUT\=$values[3]\.sam OUTPUT\=$values[0]\_MERGED\.sam SORT\_ORDER\=queryname`;
 `perl \/home\/robin\/bin\/UnmappedBamToFastq\.pl $values[0]\_MERGED\.sam $values[0]\_Unmapped`;
 `#cat $values[3]\.cor\.fq \>\> $values[0]\_Unmapped\.fastq`;
 `mv $values[0]\_Unmapped\.fastq $values[0]\_unmapped\_singletons\_corrected\.fastq`;
@@ -51,12 +51,12 @@ foreach my $QUERY (@QUERY){
 `cat $values[0]\_unmapped\_PE2\_corrected\.fastq \>\> kmergenie\.fq`;
 `cat $values[0]\_unmapped\_singletons\_corrected\.fastq \>\> kmergenie\.fq`;
 
-`\/home\/robin\/bin\/kmergenie\-1\.5854\/kmergenie kmergenie\.fq \&\> kmerlog`;
+`\/home\/robin\/bin\/kmergenie\-1\.6476\/kmergenie kmergenie\.fq \&\> kmerlog`;
 
-`\/home\/robin\/bin\/SOAPdenovo2\-src\-r240\/SOAPdenovo\-63mer all \-s $values[0]\.config \-o $values[0] \-p 10 \-V \-K \"\$\(grep \'best k\:\' kmerlog \| awk \'\{print \$3\}\'\)\"`;
-`\/home\/robin\/bin\/GapCloser \-b $values[0]\.config \-a $values[0]\.scafSeq \-o $values[0]\_gapcloser \-t 10`;
+`\/home\/robin\/bin\/SOAPdenovo2\-bin\-LINUX\-generic\-r240\/SOAPdenovo\-63mer all \-s $values[0]\.config \-o $values[0] \-p 10 \-V \-K \"\$\(grep \'best k\:\' kmerlog \| awk \'\{print \$3\}\'\)\"`;
+`\/home\/robin\/bin\/GapCloser\/GapCloser \-b $values[0]\.config \-a $values[0]\.scafSeq \-o $values[0]\_gapcloser \-t 10`;
 
-`python \/home\/robin\/bin\/quast\-2\.2\/quast\.py $values[0]\_gapcloser \-T 10 \-o quast\_scaffold`;
+`python \/home\/robin\/bin\/quast\-2\.3\/quast\.py $values[0]\_gapcloser \-T 10 \-o quast\_scaffold`;
 `rm histograms\*`;
 `rm kmergenie\.fq `;
 `rm reads\.lst\*`;
