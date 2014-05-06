@@ -22,9 +22,9 @@ foreach my $QUERY (@QUERY){
         #print "cd ".$values[3]."\n";
         # chdir($values[0]);
         `awk \'BEGIN\{P\=1\}\{if\(P\=\=1\|\|P\=\=2\)\{gsub\(\/\^\[\@\]\/\,\"\>\"\)\;print\}\; if\(P\=\=4\)P\=0\; \P\+\+\}\' $values[1] \> $values[0].fa`;
-      				foreach my $222 (@QUERY){
-      				chomp $222;
-      				my @valus = split(/\t/,$222);
+      				foreach my $hoi (@QUERY){
+      				chomp $hoi;
+      				my @valus = split(/\t/,$hoi);
         			chomp $valus[0];
         			if ($valus[0] == $values[0]){next};
 					`awk \'BEGIN\{P\=1\}\{if\(P\=\=1\|\|P\=\=2\)\{gsub\(\/\^\[\@\]\/\,\"\>\"\)\;print\}\; if\(P\=\=4\)P\=0\; \P\+\+\}\' $valus[1] \> $valus[0].fa`;
