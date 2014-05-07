@@ -27,8 +27,10 @@ foreach my $QUERY (@QUERY){
 
        # get fastq of all reads
        `bedtools bamtofastq \-i $values[0] \-fq all\.fastq`; 
+       `sed  \'\/\^\[\@\]$values[1]\/ s\/\\\[\:\/\]\[12\]\$\/\/\' all\.fastq \> temp\.fastq`;
+       `mv temp\.fastq all\.fastq`; 
       # get headers frmo the remaining unmapped reads
-       `sed  \'\/\^\[\@\]$values[1]\/ s\/\\\/\[12\]\$\/\/\' 1\_\* \| grep \-o \"\@$values[1]\[\^    \]\*\" \| sort \| uniq \| sed \'s\/\^\@\/\/\' | sed  \'s\/\\\/\[12\]\$\/\/\' \> name\_unmapped\.lst`;
+       `sed  \'\/\^\[\@\]$values[1]\/ s\/\\\[\:\/\]\[12\]\$\/\/\' 1\_\* \| grep \-o \"\@$values[1]\[\^    \]\*\" \| sort \| uniq \| sed \'s\/\^\@\/\/\' | sed  \'s\/\\\/\[12\]\$\/\/\' \> name\_unmapped\.lst`;
        # get interleaved fastq of unmapped reads
        `seqtk subseq all\.fastq name\_unmapped\.lst \> ready\_for\_celera\_mapping\.fastq`;
         # map to celera in paired-end mode
