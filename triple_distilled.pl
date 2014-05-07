@@ -19,6 +19,7 @@ foreach my $QUERY (@QUERY){
         chomp $values[3];
         print $values[3]." has begun\n";
         #print "cd ".$values[3]."\n";
+        `mkdir $values[3]`;
         chdir($values[3]);
        
 # CELERA-mapping
