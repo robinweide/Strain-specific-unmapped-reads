@@ -24,11 +24,11 @@ foreach my $QUERY (@QUERY){
        
 # CELERA-mapping
        # get fastq of all reads
-       `bedtools bamtofastq \-i $values[0] \-fq all\.fastq`; 
-       `sed  \'\/\^\@$values[1]\/ s\/\[\:\/\]\[12\]\$\/\/\' all\.fastq \> temp\.fastq`; 
-       `mv temp\.fastq all\.fastq`; 
+       `bedtools bamtofastq \-i $values[0] \-fq alll\.fastq`; 
+       `sed  \'\/\^\@$values[1]\/ s\/\[\:\/\]\[12\]\$\/\/\' alll\.fastq \> all\.fastq`; 
+       `rm alll\.fastq`; 
       # get headers frmo the remaining unmapped reads
-       `sed  \'\/\^\@$values[1]\/ s\/\[\:\/\]\[12\]\$\/\/\' \| grep \-o \"\@$values[1]\[\^\ \  \]\*\" \| sort \| uniq \| sed \'s\/\^\@\/\/\' \| sed \'s\/\[\:\/\]\[12\]\$\/\/\' \> name\_unmapped\.lst`;
+       `sed  \'\/\^\@$values[1]\/ s\/\[\:\/\]\[12\]\$\/\/\' \/data\_fedor12\/robin\/Q\_C\_Y\_C\/$values[3]\/1\_\* \| grep \-o \"\@$values[1]\[\^\ \  \]\*\" \| sort \| uniq \| sed \'s\/\^\@\/\/\' \| sed \'s\/\[\:\/\]\[12\]\$\/\/\' \> name\_unmapped\.lst`;
        # get interleaved fastq of unmapped reads
        `seqtk subseq all\.fastq name\_unmapped\.lst \> ready\_for\_celera\_mapping\.fastq`;
         # map to celera in paired-end mode
