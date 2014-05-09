@@ -52,7 +52,7 @@ foreach my $QUERY (@QUERY){
       
       
         # map to celera in paired-end mode
-        `\/home\/robin\/bin\/bwa\-0\.7\.5a\/bwa mem \-R \'\@RG\\\tID\:$values[3]\\tSM\:$values[3]\' \-M \-p \/data\_fedor12\/robin\/databases\/Celera\/Alt\_Rn\_Celera\.fa ready\_for\_celera\_mapping\.fastq \> Celera\.sam`;
+        `\/home\/robin\/bin\/bwa\-0\.7\.5a\/bwa mem \-R \'\@RG\\\tID\:celera\\tSM\:celera\' \-M \-p \/data\_fedor12\/robin\/databases\/Celera\/Alt\_Rn\_Celera\.fa ready\_for\_celera\_mapping\.fastq \> Celera\.sam`;
         # get reads, that properly map in pairs
         `samtools view \-bS \-f 2 Celera\.sam \> Celera\_proper\_mapped\.bam`;
         # get headers from properly mapped readpairs
@@ -77,7 +77,7 @@ foreach my $QUERY (@QUERY){
 #  Y-chromosomal mapping
 
       # map to celera in paired-end mode
-        `\/home\/robin\/bin\/bwa\-0\.7\.5a\/bwa mem \-R \'\@RG\\\tID\:$values[3]\\tSM\:$values[3]\' \-M \-p \/data\_fedor12\/robin\/databases\/YchrBAC\/YchrBAC\.fasta nC\_$values[3]\.fastq \> Ychr\.sam`;
+        `\/home\/robin\/bin\/bwa\-0\.7\.5a\/bwa mem \-R \'\@RG\\\tID\:ychr\\tSM\:ychr\' \-M \-p \/data\_fedor12\/robin\/databases\/YchrBAC\/YchrBAC\.fasta nC\_$values[3]\.fastq \> Ychr\.sam`;
         # get reads, that properly map in pairs
         `samtools view \-bS \-f 2 Ychr\.sam \> Ychr\_proper\_mapped\.bam`;
         # get headers from properly mapped readpairs
@@ -101,7 +101,7 @@ foreach my $QUERY (@QUERY){
 
 # ViPro mapping
         # map against vipro-db
-        `\/home\/robin\/bin\/bwa\-0\.7\.5a\/bwa mem \-R \'\@RG\\\tID\:$values[3]\\tSM\:$values[3]\' \-M \-p \/data\_fedor12\/robin\/databases\/ViPro\/ProVi\.fa nV\_$values[3]\.fastq \> V\.sam`;
+        `\/home\/robin\/bin\/bwa\-0\.7\.5a\/bwa mem \-R \'\@RG\\\tID\:vipro\\tSM\:vipro\' \-M \-p \/data\_fedor12\/robin\/databases\/ViPro\/ProVi\.fa nV\_$values[3]\.fastq \> V\.sam`;
         # report found contamination-derived reads
         `echo \'\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#     Found organisms     \#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\' \>\> TripleDistilled\.log`;
         `samtools view \-S V\.sam \-f 2 \| cut \-f3 \| sort \| uniq \-c \| sort \-nr \>\> TripleDistilled\.log`;
