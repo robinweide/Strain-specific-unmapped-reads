@@ -89,8 +89,8 @@ foreach my $QUERY (@QUERY){
 		`grep \-Fxv \-f nameMc\.lst no\.lst  \| sort \| uniq  \> nono\.lst`;
 		`grep \-Fxv \-f nameMy\.lst nono\.lst  \| sort \| uniq  \> nonono\.lst`;
 
-		`echo \'\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#	ViPro\-mapped readpairs		\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\' \>\> TripleDistilled\.log`;
-		`wc \-l nameMv\.lst \> TripleDistilled\.log`;
+		`echo \'\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#	ViPro\-mapped readpairs		\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\' \> TripleDistilled\.log`;
+		`wc \-l nameMv\.lst \>> TripleDistilled\.log`;
 		`echo \'\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#	Ychr\-mapped readpairs		\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\' \>\> TripleDistilled\.log`;
 		`wc \-l nameMy\.lst \>\> TripleDistilled\.log`;
 		`echo \'\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#	Celera\-mapped readpairs	\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\' \>\> TripleDistilled\.log`;
@@ -109,6 +109,17 @@ foreach my $QUERY (@QUERY){
 
         #get fastq of remaining reads
         `seqtk subseq all\.fastq nonono\.lst \> NoNoNo\.fastq`;
+        `java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=NoNoNo\.fastq OUTPUT\=NoNoNo\.sam SAMPLE\_NAME\=$values[3] SORT\_ORDER\=queryname`;
+		`perl \/home\/robin\/bin\/UnmappedBamToFastq\.pl NoNoNo\.sam $values[3]\_Unmapped_Filtered`;
+		`python /home/robin/bin/InterleaveFastq.py -l $values[3]\_Unmapped_Filtered_1.fastq -r $values[3]\_Unmapped_Filtered_1.fastq -o $values[3]\_Unmapped_Filtered_READPAIRS.fastq`;
+		`mv $values[3]\_Unmapped_Filtered.fastq $values[3]\_Unmapped_Filtered_SINGLETONS.fastq`;
+
+		# stats of unmapped readpairs
+        `echo \'\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#     filtered Unmapped readpairs     \#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\' \>\> TripleDistilled\.log`;
+        `\/home\/robin\/bin\/fasta\_utilities\/ea\-utils\.\1\.\1\.2\-537\/fastq\-stats $values[3]\_Unmapped_Filtered_READPAIRS.fastq \>\> TripleDistilled\.log`;
+         `echo \'\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#     filtered Unmapped singletons     \#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\' \>\> TripleDistilled\.log`;
+        `\/home\/robin\/bin\/fasta\_utilities\/ea\-utils\.\1\.\1\.2\-537\/fastq\-stats $values[3]\_Unmapped_Filtered_SINGLETONS.fastq \>\> TripleDistilled\.log`;
+
 
         `rm VY\.lst`;
         `rm VC\.lst`;
@@ -117,6 +128,7 @@ foreach my $QUERY (@QUERY){
         `rm nono\.lst`;
         `rm \*.sam`;
         `rm \*.bam`;
+        `rm NoNoNo\.fastq`;
         print $values[3]." is done\n";
         chdir "..";
 }
