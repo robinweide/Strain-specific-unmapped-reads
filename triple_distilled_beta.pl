@@ -25,45 +25,107 @@ foreach my $QUERY (@QUERY){
 # CELERA-mapping
 
     # get fastq of all reads
-    if (-e "all\.fastq") {
-        print "File all\.fastq exists.\n";
+    # if (-e "all\.fastq") {
+    #     print "File all\.fastq exists.\n";
+    # }
+    # else{
+
+    #    `bedtools bamtofastq \-i $values[0] \-fq alll\.fastq`; 
+    #    `sed  \'\/\^\@$values[1]\/ s\/\[\:\/\]\[12\]\$\/\/\' alll\.fastq \> all\.fastq`; 
+    #    `rm alll\.fastq`; 
+
+    # }      
+    if (-e "second.fastq") {
+        print "Mate-fastqs exists.\n";
     }
     else{
+    `samtools view \-f 64 $values[0] \-b \> first\.bam`;
+    `bedtools bamtofastq \-i first\.bam \-fq first\_\.fastq`;
+    `sed  \'\/\^\@$values[1]\/ s\/\[\:\/\]\[12\]\$\/\/\' first\_\.fastq \> first\.fastq`;
+    `rm first\_\.fastq`;
 
-       `bedtools bamtofastq \-i $values[0] \-fq alll\.fastq`; 
-       `sed  \'\/\^\@$values[1]\/ s\/\[\:\/\]\[12\]\$\/\/\' alll\.fastq \> all\.fastq`; 
-       `rm alll\.fastq`; 
+    `samtools view \-f 128 $values[0] \-b \> second\.bam`;
+    `bedtools bamtofastq \-i second\.bam \-fq second\_\.fastq`;
+    `sed  \'\/\^\@$values[1]\/ s\/\[\:\/\]\[12\]\$\/\/\' second\_\.fastq \> second\.fastq`;
+    `rm second\_\.fastq`;
+    }
 
-    }       
-      # get headers frmo the remaining unmapped reads
+
+      # get headers from the remaining unmapped reads
     if (-e "name\_unmapped\.lst") {
         print "File name\_unmapped\.lst exists.\n";
     }
     else{
-       `sed  \'\/\^\@$values[1]\/ s\/\[\:\/\]\[12\]\$\/\/\' \/data\_fedor12\/robin\/Q\_C\_Y\_C\/$values[3]\/1\_\* \| grep \-o \"\@$values[1]\[\^\ \  \]\*\" \| sort \| uniq \| sed \'s\/\^\@\/\/\' \| sed \'s\/\[\:\/\]\[12\]\$\/\/\' \> name\_unmapped\.lst`;
+       `sed  \'\/\^\@$values[1]\/ s\/\[\:\/\]\[12\]\$\/\/\' \/data\_fedor12\/robin\/Q\_C\_Y\_C\/$values[3]\/1\_\* \| grep \-o \"\@$values[1]\[\^\ \  \]\*\" \| sort \| uniq \| sed \'s\/\^\@\/\/\' \| sed \'s\/\[\:\/\]\[12\]\$\/\/\' \| sort \| uniq \> name\_unmapped\.lst`;
     }  
-       # get interleaved fastq of unmapped reads
-    if (-e "ready\_for\_celera\_mapping\.fastq") {
-        print "File ready\_for\_celera\_mapping\.fastq exists.\n";
+       # get fastqs of unmapped reads
+    if (-e "ready\_for\_celera\_mapping2\.fastq") {
+        print "File ready\_for\_celera\_mapping\.fastqs exists.\n";
     }
     else{
-        `seqtk subseq all\.fastq name\_unmapped\.lst \> ready\_for\_celera\_mapping\.fastq`;
+        `seqtk subseq first\.fastq name\_unmapped\.lst \> ready\_for\_celera\_mapping1\.fastq`;
+		`seqtk subseq second\.fastq name\_unmapped\.lst \> ready\_for\_celera\_mapping2\.fastq`;
     }  
+
+
+	`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=ready\_for\_celera\_mapping1\.fastq OUTPUT\=ready\_for\_celera\_mapping1\.sam SAMPLE\_NAME\=$values[3]`;
+	`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=ready\_for\_celera\_mapping2\.fastq OUTPUT\=ready\_for\_celera\_mapping2\.sam SAMPLE\_NAME\=$values[3]`;
+	`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/MergeSamFiles\.jar INPUT\=ready\_for\_celera\_mapping1\.sam INPUT\=ready\_for\_celera\_mapping2\.sam  OUTPUT\=MERGED\.sam SORT\_ORDER\=queryname`;
+	`perl \/home\/robin\/bin\/UnmappedBamToFastq\.pl MERGED\.sam $values[3]\_Unmapped`;
+	`python /home/robin/bin/InterleaveFastq.py -l $values[3]\_Unmapped_1.fastq -r $values[3]\_Unmapped_2.fastq -o RP.fastq`;
+	`mv $values[3]\_Unmapped.fastq ST.fastq`;
+
+
+
+
+
+
+
+
+
             
         # map to celera in paired-end mode
-        `\/home\/robin\/bin\/bwa\-0\.7\.5a\/bwa mem \-M \-p \/data\_fedor12\/robin\/databases\/Celera\/Alt\_Rn\_Celera\.fa ready\_for\_celera\_mapping\.fastq \> Celera\.sam`;
+        `\/home\/robin\/bin\/bwa\-0\.7\.5a\/bwa mem \-M \-p \/data\_fedor12\/robin\/databases\/Celera\/Alt\_Rn\_Celera\.fa RP.fastq \> CeleraR\.sam`;
         # get reads, that properly map in pairs
-        `samtools view \-bS \-f 2 Celera\.sam \> Celera\_proper\_mapped\.bam`;
+        `samtools view \-bS \-f 2 CeleraR\.sam \> Celera\_proper\_mappedR\.bam`;
 
  		# map to celera in paired-end mode
- 		`\/home\/robin\/bin\/bwa\-0\.7\.5a\/bwa mem \-M \-p \/data\_fedor12\/robin\/databases\/YchrBAC\/YchrBAC\.fasta ready\_for\_celera\_mapping\.fastq \> Ychr\.sam`;
+ 		`\/home\/robin\/bin\/bwa\-0\.7\.5a\/bwa mem \-M \-p \/data\_fedor12\/robin\/databases\/YchrBAC\/YchrBAC\.fasta RP.fastq \> YchrR\.sam`;
         # get reads, that properly map in pairs
-        `samtools view \-bS \-f 2 Ychr\.sam \> Ychr\_proper\_mapped\.bam`;
+        `samtools view \-bS \-f 2 YchrR\.sam \> Ychr\_proper\_mappedR\.bam`;
 
 		# map against vipro-db
-        `\/home\/robin\/bin\/bwa\-0\.7\.5a\/bwa mem \-M \-p \/data\_fedor12\/robin\/databases\/ViPro\/ProVi\.fa ready\_for\_celera\_mapping\.fastq \> V\.sam`;
+        `\/home\/robin\/bin\/bwa\-0\.7\.5a\/bwa mem \-M \-p \/data\_fedor12\/robin\/databases\/ViPro\/ProVi\.fa RP.fastq \> VR\.sam`;
         # extract properly-mapped reads
-        `samtools view \-bS \-f 2 V\.sam \> V\_proper\_mapped\.bam`;
+        `samtools view \-bS \-f 2 VR\.sam \> V\_proper\_mappedR\.bam`;
+
+
+# ######################################################################
+
+        # map to celera in paired-end mode
+        `\/home\/robin\/bin\/bwa\-0\.7\.5a\/bwa mem \-M \-p \/data\_fedor12\/robin\/databases\/Celera\/Alt\_Rn\_Celera\.fa ST.fastq \> CeleraR\.sam`;
+        # get reads, that properly map in pairs
+        `samtools view \-bS \-f 2 CeleraR\.sam \> Celera\_proper\_mappedS\.bam`;
+
+ 		# map to celera in paired-end mode
+ 		`\/home\/robin\/bin\/bwa\-0\.7\.5a\/bwa mem \-M \-p \/data\_fedor12\/robin\/databases\/YchrBAC\/YchrBAC\.fasta ST.fastq \> YchrR\.sam`;
+        # get reads, that properly map in pairs
+        `samtools view \-bS \-f 2 YchrR\.sam \> Ychr\_proper\_mappedS\.bam`;
+
+		# map against vipro-db
+        `\/home\/robin\/bin\/bwa\-0\.7\.5a\/bwa mem \-M \-p \/data\_fedor12\/robin\/databases\/ViPro\/ProVi\.fa ST.fastq \> VR\.sam`;
+        # extract properly-mapped reads
+        `samtools view \-bS \-f 2 VR\.sam \> V\_proper\_mappedS\.bam`;
+
+
+	`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/MergeSamFiles\.jar INPUT\=Celera\_proper\_mappedR\.bam INPUT\=Celera\_proper\_mappedS\.bam OUTPUT\=Celera\_proper\_mapped\.bam SORT\_ORDER\=queryname`;
+	`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/MergeSamFiles\.jar INPUT\=Ychr\_proper\_mappedS\.bam INPUT\=Ychr\_proper\_mappedR\.bam  OUTPUT\=Ychr\_proper\_mapped\.bam SORT\_ORDER\=queryname`;
+	`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/MergeSamFiles\.jar INPUT\=V\_proper\_mappedS\.bam INPUT\=V\_proper\_mappedR\.bam  OUTPUT\=V\_proper\_mapped\.bam SORT\_ORDER\=queryname`;
+
+
+
+
+
 
 
         # get headers from properly mapped readpairs
