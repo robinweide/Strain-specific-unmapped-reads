@@ -74,16 +74,7 @@ foreach my $QUERY (@QUERY){
 	`perl \/home\/robin\/bin\/UnmappedBamToFastq\.pl MERGED\.sam $values[3]\_Unmapped`;
 	`python /home/robin/bin/InterleaveFastq.py -l $values[3]\_Unmapped_1.fastq -r $values[3]\_Unmapped_2.fastq -o RP.fastq`;
 	`mv $values[3]\_Unmapped.fastq ST.fastq`;
-
-
-
-
-
-
-
-
-
-            
+        
         # map to celera in paired-end mode
         `\/home\/robin\/bin\/bwa\-0\.7\.5a\/bwa mem \-M \-p \/data\_fedor12\/robin\/databases\/Celera\/Alt\_Rn\_Celera\.fa RP.fastq \> CeleraR\.sam`;
         # get reads, that properly map in pairs
@@ -121,10 +112,6 @@ foreach my $QUERY (@QUERY){
 	`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/MergeSamFiles\.jar INPUT\=Celera\_proper\_mappedR\.bam INPUT\=Celera\_proper\_mappedS\.bam OUTPUT\=Celera\_proper\_mapped\.bam SORT\_ORDER\=queryname`;
 	`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/MergeSamFiles\.jar INPUT\=Ychr\_proper\_mappedS\.bam INPUT\=Ychr\_proper\_mappedR\.bam  OUTPUT\=Ychr\_proper\_mapped\.bam SORT\_ORDER\=queryname`;
 	`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/MergeSamFiles\.jar INPUT\=V\_proper\_mappedS\.bam INPUT\=V\_proper\_mappedR\.bam  OUTPUT\=V\_proper\_mapped\.bam SORT\_ORDER\=queryname`;
-
-
-
-
 
 
 
@@ -170,8 +157,8 @@ foreach my $QUERY (@QUERY){
 
 
         #get fastq of remaining reads
-        `seqtk subseq all\.fastq nonono\.lst \> NoNoNo\.fastq`;
-        
+        `seqtk subseq ready\_for\_celera\_mapping1\.fastq nonono\.lst \> NoNoNo\.fastq`;
+		`seqtk subseq ready\_for\_celera\_mapping2\.fastq nonono\.lst \>\> NoNoNo\.fastq`;
 
         `rm VY\.lst`;
         `rm VC\.lst`;
