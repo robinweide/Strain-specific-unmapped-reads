@@ -67,9 +67,10 @@ foreach my $QUERY (@QUERY){
 		`seqtk subseq second\.fastq name\_unmapped\.lst \> ready\_for\_celera\_mapping2\.fastq`;
     }  
 
-
-	`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=ready\_for\_celera\_mapping1\.fastq OUTPUT\=ready\_for\_celera\_mapping1\.sam SAMPLE\_NAME\=$values[3]`;
-	`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=ready\_for\_celera\_mapping2\.fastq OUTPUT\=ready\_for\_celera\_mapping2\.sam SAMPLE\_NAME\=$values[3]`;
+    `perl \/home\/robin\/bin\/AddPairedEndSuffix\.pl ready\_for\_celera\_mapping1\.fastq ready\_for\_celera\_mapping1_\.fastq 1`;
+    `perl \/home\/robin\/bin\/AddPairedEndSuffix\.pl  ready\_for\_celera\_mapping2\.fastq ready\_for\_celera\_mapping2_\.fastq 2`;
+	`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=ready\_for\_celera\_mapping1_\.fastq OUTPUT\=ready\_for\_celera\_mapping1\.sam SAMPLE\_NAME\=$values[3]`;
+	`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=ready\_for\_celera\_mapping2_\.fastq OUTPUT\=ready\_for\_celera\_mapping2\.sam SAMPLE\_NAME\=$values[3]`;
 	`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/MergeSamFiles\.jar INPUT\=ready\_for\_celera\_mapping1\.sam INPUT\=ready\_for\_celera\_mapping2\.sam  OUTPUT\=MERGED\.sam SORT\_ORDER\=queryname`;
 	`perl \/home\/robin\/bin\/UnmappedBamToFastq\.pl MERGED\.sam $values[3]\_Unmapped`;
 	`python /home/robin/bin/InterleaveFastq.py -l $values[3]\_Unmapped_1.fastq -r $values[3]\_Unmapped_2.fastq -o RP.fastq`;
