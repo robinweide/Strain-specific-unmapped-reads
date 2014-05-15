@@ -157,15 +157,27 @@ foreach my $QUERY (@QUERY){
 		`wc \-l nonono\.lst \>\> TripleDistilled\.log`;
 
 
-        #get fastq of remaining reads
-        `seqtk subseq ready\_for\_celera\_mapping1\.fastq nonono\.lst \> NoNoNo\.fastq`;
-		`seqtk subseq ready\_for\_celera\_mapping2\.fastq nonono\.lst \>\> NoNoNo\.fastq`;
+        #get fastq of remaining reads       
+        `seqtk subseq ready\_for\_celera\_mapping1\.fastq nonono\.lst \> NoNoNo1\.fastq`;
+		`seqtk subseq ready\_for\_celera\_mapping2\.fastq nonono\.lst \> NoNoNo2\.fastq`;
+         `perl \/home\/robin\/bin\/AddPairedEndSuffix\.pl NoNoNo1\.fastq NoNoNo1suf\.fastq 1`;
+         `perl \/home\/robin\/bin\/AddPairedEndSuffix\.pl NoNoNo2\.fastq NoNoNo2suf\.fastq 2`;
+
+    `java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=NoNoNo1suf\.fastq OUTPUT\=NoNoNo1suf\.sam SAMPLE\_NAME\=$values[3]`;
+    `java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=NoNoNo2suf\.fastq OUTPUT\=NoNoNo2suf\.sam SAMPLE\_NAME\=$values[3]`;
+    `java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/MergeSamFiles\.jar INPUT\=NoNoNo1suf\.sam INPUT\=NoNoNo2suf\.sam  OUTPUT\=MERGEDno\.sam SORT\_ORDER\=queryname`;
+    `perl \/home\/robin\/bin\/UnmappedBamToFastq\.pl MERGEDno\.sam $values[3]\_TripleDistilled`;
+    `python /home/robin/bin/InterleaveFastq.py -l $values[3]\_TripleDistilled\_1\.fastq -r $values[3]\_TripleDistilled\_2\.fastq -o READY\_FOR\_DENOVO\_RP\.fastq`;
+    `mv $values[3]\_TripleDistilled\.fastq READY\_FOR\_DENOVO\_ST\.fastq`;
+
+
 
         `rm VY\.lst`;
         `rm VC\.lst`;
         `rm YC\.lst`;
         `rm no\.lst`;
-        `rm nono\.lst`;
+        `rm *ono\*`;
+                `rm *oNo\*`;
         `rm \*.sam`;
         `rm \*.bam`;
         print $values[3]." is done\n";
