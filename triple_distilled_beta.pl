@@ -36,10 +36,11 @@ foreach my $QUERY (@QUERY){
 
     # }     
 if (-e "\/data\_fedor12\/robin\/Q\_C\_Y\_C\/$values[3]\/1\_\*bz2") {
-        print "Unzip is not needed.\n";
+            `bunzip2 \/data\_fedor12\/robin\/Q\_C\_Y\_C\/$values[3]\/1\_\*bz2`;
+
     }
     else{
-        `bunzip2 \/data\_fedor12\/robin\/Q\_C\_Y\_C\/$values[3]\/1\_\*bz2`;
+        print "Unzip is not needed.\n";
 }
 
 
