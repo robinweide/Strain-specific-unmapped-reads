@@ -34,7 +34,17 @@ foreach my $QUERY (@QUERY){
     #    `sed  \'\/\^\@$values[1]\/ s\/\[\:\/\]\[12\]\$\/\/\' alll\.fastq \> all\.fastq`; 
     #    `rm alll\.fastq`; 
 
-    # }      
+    # }     
+if (-e "\/data\_fedor12\/robin\/Q\_C\_Y\_C\/$values[3]\/1\_\*bz2") {
+        print "Unzip is not needed.\n";
+    }
+    else{
+        `bunzip2 \/data\_fedor12\/robin\/Q\_C\_Y\_C\/$values[3]\/1\_\*bz2`;
+}
+
+
+
+
     if (-e "second.fastq") {
         print "Mate-fastqs exists.\n";
     }
@@ -176,10 +186,17 @@ foreach my $QUERY (@QUERY){
         `rm VC\.lst`;
         `rm YC\.lst`;
         `rm no\.lst`;
-        `rm *ono\*`;
+        `rm \*ono\*`;
+        `rm \*TripleDistilled\_\*\.fastq`;
+        `rm first\*`;
+        `rm second\*`;
                 `rm *oNo\*`;
         `rm \*.sam`;
         `rm \*.bam`;
+        `rm name_unmapped.lst`;
+        `rm ready\*`;
+        `rm RP\.fastq`;
+        `rm ST\.fastq`;
         print $values[3]." is done\n";
         chdir "..";
 }
