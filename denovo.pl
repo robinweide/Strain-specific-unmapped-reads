@@ -60,7 +60,7 @@ foreach my $QUERY (@QUERY){
 
 `\/home\/robin\/bin\/kmergenie\-1\.6476\/kmergenie kmergenie\.fq \&\> kmerlog`;
 
-`\/home\/robin\/bin\/SOAPdenovo2\-bin\-LINUX\-generic\-r240\/SOAPdenovo\-63mer all \-s $values[0]\.config \-o $values[0] \-p 10 \-V \-K \"\$\(grep \'best k\:\' kmerlog \| awk \'\{print \$3\}\'\)\"`;
+`\/home\/robin\/bin\/SOAPdenovo2\-bin\-LINUX\-generic\-r240\/SOAPdenovo\-63mer all \-s $values[0]\.config \-o $values[0] \-p 10 \-V \-K \"\$\(grep \'best k\:\' kmerlog \| tail \-n 1 \| awk \'\{print \$3\}\'\)\"`;
 `\/home\/robin\/bin\/GapCloser\/GapCloser \-b $values[0]\.config \-a $values[0]\.scafSeq \-o $values[0]\_gapcloser \-t 10`;
 
 `python \/home\/robin\/bin\/quast\-2\.3\/quast\.py $values[0]\_gapcloser \-T 10 \-o quast\_scaffold`;
