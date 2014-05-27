@@ -49,9 +49,8 @@ foreach my $QUERY (@QUERY){
 `cat rp\.fastq \> begin\.fastq`
 `cat st\.fastq \>\> begin\.fastq`
 
-
-    if (-e "second.fastq") {
-        print "Mate-fastqs exists.\n";
+  if (-e "first.fastq") {
+        print "fwd-fastq exists.\n";
     }
     else{
     `samtools view \-f 64 $values[0] \-b \> first\.bam`;
@@ -59,6 +58,12 @@ foreach my $QUERY (@QUERY){
     `sed  \'\/\^\@$values[1]\/ s\/\[\:\/\]\[12\]\$\/\/\' first\_\.fastq \> first\.fastq`;
     `rm first\_\.fastq`;
 
+}
+
+    if (-e "second.fastq") {
+        print "rev-fastq exists.\n";
+    }
+    else{
     `samtools view \-f 128 $values[0] \-b \> second\.bam`;
     `bedtools bamtofastq \-i second\.bam \-fq second\_\.fastq`;
     `sed  \'\/\^\@$values[1]\/ s\/\[\:\/\]\[12\]\$\/\/\' second\_\.fastq \> second\.fastq`;
