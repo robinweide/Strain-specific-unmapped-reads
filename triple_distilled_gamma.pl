@@ -42,12 +42,12 @@ foreach my $QUERY (@QUERY){
 #     else{
 #         print "Unzip is not needed.\n";
 # }
-`cp $values[4] rp\.fastq\.bz2`
-`cp $values[5] st\.fastq\.bz2`
-`bunzip2 rp\.fastq\.bz2`
-`bunzip2 st\.fastq\.bz2`
-`cat rp\.fastq \> begin\.fastq`
-`cat st\.fastq \>\> begin\.fastq`
+`cp $values[4] rp\.fastq\.bz2`;
+`cp $values[5] st\.fastq\.bz2`;
+`bunzip2 rp\.fastq\.bz2`;
+`bunzip2 st\.fastq\.bz2`;
+`cat rp\.fastq \> begin\.fastq`;
+`cat st\.fastq \>\> begin\.fastq`;
 
   if (-e "first.fastq") {
         print "fwd-fastq exists.\n";
