@@ -29,7 +29,7 @@ foreach my $QUERY (@QUERY){
 
         
 # map to celera in paired-end mode
-`\/home\/robin\/bin\/bwa\-0\.7\.5a\/bwa mem \-M \-p \/data\_fedor12\/robin\/databases\/Celera\/Alt\_Rn\_Celera\.fa celera\_m1\.fq celera\_m2\.fq \> CeleraR\.sam`;
+`\/home\/robin\/bin\/bwa\-0\.7\.5a\/bwa mem \-M \/data\_fedor12\/robin\/databases\/Celera\/Alt\_Rn\_Celera\.fa celera\_m1\.fq celera\_m2\.fq \> CeleraR\.sam`;
 # get reads, that properly map in pairs
 `samtools view \-bS \-f 2 CeleraR\.sam \> Celera\_proper\_mappedR\.bam`;
 
