@@ -33,10 +33,11 @@ foreach my $QUERY (@QUERY){
 # get reads, that properly map in pairs
 `samtools view \-bS \-f 2 CeleraR\.sam \> Celera\_proper\_mappedR\.bam`;
 
-`bedtools intersect \-abam Celera\_proper\_mappedR\.bam \-wa \-u -b \/data\_fedor12\/robin\/databases\/EVE\/CELERA\_EVE\/overlap6EveCelera\.bed \> unmappedByTechnicalMissingInCelera\.sam`;
-`samtools view -S unmappedByTechnicalMissingInCelera\.sam | awk \'\{print \$1\}\' \| sort \| uniq \> unmappedByTechnicalMissingInCeleraReadPairs\.lst`;
-`wc \-l unmappedByTechnicalMissingInCeleraReadPairs\.lst \> DoublCask\.log`;
+`bedtools intersect \-abam Celera\_proper\_mappedR\.bam \-wa \-u -b \/data\_fedor12\/robin\/databases\/EVE\/CELERA\_EVE\/overlap6EveCelera\.bed \> unmappedByTechnicalMissingInCelera\.bam`;
+`samtools view unmappedByTechnicalMissingInCelera\.bam | awk \'\{print \$1\}\' \| sort \| uniq \> unmappedByTechnicalMissingInCeleraReadPairs\.lst`;
+`wc \-l unmappedByTechnicalMissingInCeleraReadPairs\.lst \> DoubleCask\.log`;
 
 `grep \-Fx \-f nameMy\.lst unmappedByTechnicalMissingInCeleraReadPairs\.lst \> unmappedByTechnicalMissingInCeleraReadPairsAlsoInYchr\.lst`;
-`wc \-l unmappedByTechnicalMissingInCeleraReadPairsAlsoInYchr\.lst \> DoublCask\.log`;
+`wc \-l unmappedByTechnicalMissingInCeleraReadPairsAlsoInYchr\.lst \> DoubleCask\.log`;
+        chdir "..";
 }
