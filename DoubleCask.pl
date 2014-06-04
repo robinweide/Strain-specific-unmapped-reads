@@ -38,6 +38,6 @@ foreach my $QUERY (@QUERY){
 `wc \-l unmappedByTechnicalMissingInCeleraReadPairs\.lst \> DoubleCask\.log`;
 
 `grep \-Fx \-f nameMy\.lst unmappedByTechnicalMissingInCeleraReadPairs\.lst \> unmappedByTechnicalMissingInCeleraReadPairsAlsoInYchr\.lst`;
-`wc \-l unmappedByTechnicalMissingInCeleraReadPairsAlsoInYchr\.lst \> DoubleCask\.log`;
+`wc \-l unmappedByTechnicalMissingInCeleraReadPairsAlsoInYchr\.lst \>\> DoubleCask\.log`;
         chdir "..";
 }
