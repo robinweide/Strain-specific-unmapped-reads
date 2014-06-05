@@ -37,7 +37,9 @@ foreach my $QUERY (@QUERY){
 `samtools view unmappedByTechnicalMissingInCelera\.bam | awk \'\{print \$1\}\' \| sort \| uniq \> unmappedByTechnicalMissingInCeleraReadPairs\.lst`;
 `wc \-l unmappedByTechnicalMissingInCeleraReadPairs\.lst \> DoubleCask\.log`;
 
-`grep \-Fx \-f nameMy\.lst unmappedByTechnicalMissingInCeleraReadPairs\.lst \> unmappedByTechnicalMissingInCeleraReadPairsAlsoInYchr\.lst`;
+`grep \-Fx \-f nameMy\.lst nameMc\.lst  \| sort \| uniq \> YC\.lst`;
+
+`grep \-Fx \-f YC\.lst unmappedByTechnicalMissingInCeleraReadPairs\.lst \> unmappedByTechnicalMissingInCeleraReadPairsAlsoInYchr\.lst`;
 `wc \-l unmappedByTechnicalMissingInCeleraReadPairsAlsoInYchr\.lst \>\> DoubleCask\.log`;
         chdir "..";
 }
