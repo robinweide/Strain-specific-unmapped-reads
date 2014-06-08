@@ -20,7 +20,12 @@ foreach my $QUERY (@QUERY){
         chdir($values[0]);
 
 
-`sh \/home\/robin\/github\/Strain\-specific\-unmapped\-reads\/deinterleave\_fastq\.sh \< $values[1] 1\.fastq 2\.fastq`;
+# `sh \/home\/robin\/github\/Strain\-specific\-unmapped\-reads\/deinterleave\_fastq\.sh \< $values[1] f.fastq r.fastq
+
+
+`cat $values[1] \| paste \- \- \- \- \- \- \- \-  \| cut \-f 1\-4 \| tr \"\\t\" \"\\n\" \> 1.fastq`;
+`cat $values[1] \| paste \- \- \- \- \- \- \- \-  \| cut \-f 5\-8 \| tr \"\\t\" \"\\n\" \> 2.fastq`;
+
 
 `echo 1\.fastq \> reads\.lst`;
 `echo 2\.fastq \>\> reads\.lst`;
