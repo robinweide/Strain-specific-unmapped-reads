@@ -19,8 +19,8 @@ foreach my $QUERY (@QUERY){
         `mkdir $values[0]`;
         chdir($values[0]);
 
-`cat $values[1] \| paste \- \- \- \- \- \- \- \-  \| tee \>\(cut \-f 1\-4 \| tr \"\\t\" \"\\n\" \> 1.fastq\) \| cut \-f 5\-8 \| tr \"\\t\" \"\\n\" \> 2.fastq`;
 
+`sh \/home\/robin\/github\/Strain\-specific\-unmapped\-reads\/deinterleave\_fastq\.sh \< $values[1] 1\.fastq 2\.fastq`;
 
 `echo 1\.fastq \> reads\.lst`;
 `echo 2\.fastq \>\> reads\.lst`;
