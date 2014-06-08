@@ -19,7 +19,7 @@ foreach my $QUERY (@QUERY){
         `mkdir $values[0]`;
         chdir($values[0]);
 
-`paste \- \- \- \- \- \- \- \- \< $values[1] \| tee \>\(cut \-f 1\-4 \| tr \"\\t\" \"\\n\" \> 1.fastq\) \| cut \-f 5\-8 \| tr \"\\t\" \"\\n\" \> 2.fastq`;
+`cat $values[1] \| paste \- \- \- \- \- \- \- \-  \| tee \>\(cut \-f 1\-4 \| tr \"\\t\" \"\\n\" \> 1.fastq\) \| cut \-f 5\-8 \| tr \"\\t\" \"\\n\" \> 2.fastq`;
 
 
 `echo 1\.fastq \> reads\.lst`;
