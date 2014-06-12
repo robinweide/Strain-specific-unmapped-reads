@@ -1,4 +1,17 @@
-/data_fedor12/wim/Analysis/ratfounders/raw_data/pipeline/outputILUMINA/LH_MavRrrc/LH_MavRrrc_PE1__dedup_realigned_bqsr.bam	ERR	3	LH_MavRrrc	/data_fedor12/robin/Q_C_Y_C/LH_MavRrrc/1_LH_MavRrrc_PE1__dedup_realigned_bqsr_PINDELUNMAPPED_trimmed_singletons.fastq	/data_fedor12/robin/Q_C_Y_C/LH_MavRrrc/1_LH_MavRrrc_PE1__dedup_realigned_bqsr_PINDELUNMAPPED_trimmed_readpairs.fastq
-/data_fedor12/wim/Analysis/ratfounders/raw_data/pipeline/outputILUMINA/LL_MavRrrc/LL_MavRrrc__dedup_realigned_bqsr.bam	ERR	3	LL_MavRrrc	/data_fedor12/robin/Q_C_Y_C/LL_MavRrrc/1_LL_MavRrrc__dedup_realigned_bqsr_PINDELUNMAPPED_trimmed_readpairs.fastq	/data_fedor12/robin/Q_C_Y_C/LL_MavRrrc/1_LL_MavRrrc__dedup_realigned_bqsr_PINDELUNMAPPED_trimmed_singletons.fastq
-/data_fedor12/wim/Analysis/ratfounders/raw_data/pipeline/outputILUMINA/MNS_Gib/MNS_Gib__dedup_realigned_bqsr.bam	ERR	3	MNS_Gib	/data_fedor12/robin/Q_C_Y_C/MNS_Gib/1_MNS_Gib__dedup_realigned_bqsr_PINDELUNMAPPED_trimmed_readpairs.fastq.bz2	/data_fedor12/robin/Q_C_Y_C/MNS_Gib/1_MNS_Gib__dedup_realigned_bqsr_PINDELUNMAPPED_trimmed_singletons.fastq.bz2
-/data_fedor12/wim/Analysis/ratfounders/raw_data/pipeline/outputILUMINA/SHR/SHR_dedup_realigned_bqsr.bam	SHR_PE	2	SHR_olalPcv	/data_fedor12/robin/Q_C_Y_C/SHR/1_SHR_dedup_realigned_bqsr_PINDELUNMAPPED_trimmed_readpairs.fastq.bz2	/data_fedor12/robin/Q_C_Y_C/SHR/1_SHR_dedup_realigned_bqsr_PINDELUNMAPPED_trimmed_singletons.fastq.bz2
+for ref in */*gapcloser.fasta
+do 
+# echo $ref
+echo $(basename $ref | sed 's/_gapcloser.fasta//')
+for read in /data_fedor13/robin/CompaReads/*.fastq
+do
+# echo $read
+if [ $(basename $read | sed 's/.fastq//') == $(basename $ref | sed 's/_gapcloser.fasta//') ]
+   then
+      continue
+   fi
+echo $(basename $read | sed 's/.fastq//')
+/data_fedor12/common_scripts/bwa/bwa-0.7.7/bwa mem -t 40 -p $ref $read | samtools $(basename $ref | /data_fedor8/common_scripts/samtools/samtools-0.1.19/samtools view -Sb -f 2 >sed 's/_gapcloser.fasta//')_$(basename $read | sed 's/.fastq//').sam 
+done
+# java -Xmx2g -jar /data_fedor12/common_scripts/picard/picard-tools-1.109/MergeSamFiles.jar INPUT= \
+# OUTPUT= $(basename $ref | sed 's/_gapcloser.fasta//')_merged.bam SORT\_ORDER\=queryname
+done
