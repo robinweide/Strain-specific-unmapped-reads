@@ -17,7 +17,7 @@ foreach my $QUERY (@QUERY){
         my $Qname = basename($QUERY);
         my @values = split(/\t/,$QUERY);
         chomp $values[3];
-        print $values[3];
+        print $values[3]."\n";
         #print "cd ".$values[3]."\n";
         
        
@@ -25,7 +25,7 @@ foreach my $QUERY (@QUERY){
 
 
        `sed  \'\/\^\@$values[1]\/ s\/\[\:\/\]\[12\]\$\/\/\' \/data\_fedor12\/robin\/Q\_C\_Y\_C\/$values[3]\/1\_\* \| grep \-o \"\@$values[1]\[\^\ \  \]\*\" \| sort \| uniq \| sed \'s\/\^\@\/\/\' \| sed \'s\/\[\:\/\]\[12\]\$\/\/\' \| sort \| uniq \| wc \-l \| awk \'\{print \$1\*2\}\'`;
- 
+ print "\n";
 
   
 }
