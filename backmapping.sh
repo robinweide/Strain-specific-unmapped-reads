@@ -17,7 +17,7 @@ samtools sort $(basename $line1 | sed 's/_gapcloser.fasta//g')_$(basename $line2
 
 sort -n -k1,1 $(basename $line1 | sed 's/_gapcloser.fasta//g')_$(basename $line2 | sed 's/.fastq//g').namelencov > $(basename $line1 | sed 's/_gapcloser.fasta//g')_$(basename $line2 | sed 's/.fastq//g').namelencov1
 
-mv $(basename $line1 | sed 's/_gapcloser.fasta//g')_$(basename $line2 | sed 's/.fastq//g').namelencov1 > $(basename $line1 | sed 's/_gapcloser.fasta//g')_$(basename $line2 | sed 's/.fastq//g').namelencov
+mv $(basename $line1 | sed 's/_gapcloser.fasta//g')_$(basename $line2 | sed 's/.fastq//g').namelencov1 $(basename $line1 | sed 's/_gapcloser.fasta//g')_$(basename $line2 | sed 's/.fastq//g').namelencov
 
 done < file2
 done < file1
