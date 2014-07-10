@@ -30,7 +30,7 @@ foreach my $QUERY (@QUERY){
       		my @valus = split(/\t/,$hoi);
         	chomp $valus[0];
         	# if ($valus[0] eq $values[0]){next};
-			`\/home\/robin\/bin\/compareads\-2\.0\.2\/compare\_reads \-a $values[0] -b $valus[0] -k $ARGV[2] -t 2 -r 46 \&\> $values[0]\_in\_$valus[0].compa\-out`;
+			`\/home\/robin\/bin\/compareads\-2\.0\.2\/compare\_reads \-a $values[0] -b $valus[0] -k $ARGV[2] -t 2 \&\> $values[0]\_in\_$valus[0].compa\-out`;
 			`\/home\/robin\/bin\/compareads\-2\.0\.2\/extract\_reads $values[0] $values[0]\_in\_$valus[0]\.bv`;
 		}
 
