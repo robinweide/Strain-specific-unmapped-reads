@@ -20,4 +20,4 @@ sort -n -k1,1 $(basename $line1 | sed 's/_gapcloser.fasta//g')_$(basename $line2
 mv $(basename $line1 | sed 's/_gapcloser.fasta//g')_$(basename $line2 | sed 's/.fastq//g').namelencov1 $(basename $line1 | sed 's/_gapcloser.fasta//g')_$(basename $line2 | sed 's/.fastq//g').namelencov
 
 done < file2
-done < file1
+done < $1
