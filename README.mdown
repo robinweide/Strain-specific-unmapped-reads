@@ -1,0 +1,8 @@
+# The scrapheap challenge:
+## Extracting relevant biological information, including strain-specific genomic segments, from unmapped NGS-reads.
+
+Code for manuscript:
+*       ContigSplitter.ipynb
+        * Divide contigs in strain-specific and common ones
+        * Input: BLAT-psl files of all-vs-all contig-alignments
+        * Output: contignames of strain-specific contig
