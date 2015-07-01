@@ -9,8 +9,12 @@ import sys, re, numpy
 #       both global (also non-coding seqs) and coding-only scale.
 # Arg 1: Input-GFF3
 # Arg 2: basename
-inputGFF3 = open(sys.argv[1],'r')
+# Arg 3: optional fasta handle-prefix
+inputGFF3 = inputGFF3 = open(sys.argv[1],'r')
 basename = str(sys.argv[2])
+prefix = ''
+if len(sys.argv) == 4:
+    prefix = str(str(sys.argv[3]) + '_')
 
 def warning(*objs):
     print("WARNING: ", *objs, file=sys.stderr)
@@ -88,24 +92,25 @@ for predictionBlock in group_by_heading( inputGFF3 ):
         prot = regex.sub('', protList)
         if len(prot) > 0:
             AA_LengthList.append(len(prot))
-            fa.write('>' + handle + "\n" + prot.rstrip() + '\n')
+            fa.write('>' + prefix  + handle + "\n" + prot.rstrip() + '\n')
 
 # writing stats
-nonCoding = numpy.array(noPrediction_LengthList)
-Coding = numpy.array(Prediction_LengthList)
-AA = numpy.array(AA_LengthList)
-statname = str(str(basename) + str('.stats'))
-st = open(statname , 'w')
-st.write('ID\tvariable\tvalue\n')
-st.write('Length protein-coding seqs\tN\t' + str(len(Coding))+ "\n")
-st.write('Length protein-coding seqs\tMu\t' + str(numpy.mean(Coding, axis=0))+ "\n")
-st.write('Length protein-coding seqs\tSigma\t' + str(numpy.std(Coding, axis=0))+ "\n")
-st.write('Length non-coding seqs\tN\t' +  str(len(nonCoding))+ "\n")
-st.write('Length non-coding seqs\tMu\t' + str(numpy.mean(nonCoding, axis=0))+ "\n")
-st.write('Length non-coding seqs\tSigma\t' + str(numpy.std(nonCoding, axis=0))+ "\n")
-st.write('Length protein-coding AA\tN\t' +  str(len(AA))+ "\n")
-st.write('Length protein-coding AA\tMu\t' + str(numpy.mean(AA, axis=0)) + "\n")
-st.write('Length protein-coding AA\tSigma\t' + str(numpy.std(AA, axis=0))+ "\n")
+with numpy.errstate(all='ignore'):
+    nonCoding = numpy.array(noPrediction_LengthList)
+    Coding = numpy.array(Prediction_LengthList)
+    AA = numpy.array(AA_LengthList)
+    statname = str(str(basename) + str('.stats'))
+    st = open(statname , 'w')
+    st.write('ID\tvariable\tvalue\n')
+    st.write('Length protein-coding seqs\tN\t' + str(len(Coding))+ "\n")
+    st.write('Length protein-coding seqs\tMu\t' + str(numpy.mean(Coding, axis=0))+ "\n")
+    st.write('Length protein-coding seqs\tSigma\t' + str(numpy.std(Coding, axis=0))+ "\n")
+    st.write('Length non-coding seqs\tN\t' +  str(len(nonCoding))+ "\n")
+    st.write('Length non-coding seqs\tMu\t' + str(numpy.mean(nonCoding, axis=0))+ "\n")
+    st.write('Length non-coding seqs\tSigma\t' + str(numpy.std(nonCoding, axis=0))+ "\n")
+    st.write('Length protein-coding AA\tN\t' +  str(len(AA))+ "\n")
+    st.write('Length protein-coding AA\tMu\t' + str(numpy.mean(AA, axis=0)) + "\n")
+    st.write('Length protein-coding AA\tSigma\t' + str(numpy.std(AA, axis=0))+ "\n")
 inputGFF3.close()
 st.close()
 fa.close()

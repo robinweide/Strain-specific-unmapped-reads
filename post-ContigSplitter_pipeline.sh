@@ -28,3 +28,18 @@ for i in 500plus/Strain.fa/*; do echo $i; grep ^'>' $i  | sed 's/>//' | sort -u 
 # STEP 4
 # Augustus-prediction on fedor12
 ls -d -1 $PWD*/*/*.fa | parallel -j 10 '/home/robin/bin/augustus-3.0.1/bin/augustus --AUGUSTUS_CONFIG_PATH=/home/robin/bin/augustus-3.0.1/config/ --gff3=on --uniqueGeneId=true --species=human {} > $(echo {} | sed 's/.fa$/.gff3/')'
+
+# STEP 5
+# extract stats and AA-fasta's from augustus-output
+for i in */*.gff3; do echo $i; python ~/GitHub/Strain-specific-unmapped-reads/augustusGFF3parser.py $i $(echo $i | sed 's/.gff3/.fa/' | sed 's/.gff3//') $(basename $i | sed 's/.gff3//') ; done
+
+# STEP 6
+# Combine all fasta within the common/strain/mouse/rat bins
+cat CommonMouse.fa/*.fa > CommonMouse.fasta
+cat CommonRat.fa/*.fa > CommonRat.fasta
+cat StrainMouse.fa/*.fa > StrainMouse.fasta
+cat StrainRat.fa/*.fa > StrainRat.fasta
+
+# STEP 7
+# send all four fastas from step 6 to orthoMCL
+# http://www.orthomcl.org/orthomcl/proteomeUpload.do
