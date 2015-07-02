@@ -34,7 +34,7 @@ ls -d -1 $PWD*/*/*.fa | parallel -j 10 '/home/robin/bin/augustus-3.0.1/bin/augus
 for i in */*.gff3; do echo $i; python ~/GitHub/Strain-specific-unmapped-reads/augustusGFF3parser.py $i $(echo $i | sed 's/.gff3/.fa/' | sed 's/.gff3//') $(basename $i | sed 's/.gff3//') ; done
 
 # STEP 6
-# Combine all fasta within the common/strain/mouse/rat bins
+# Combine all protein-fasta's within the common/strain/mouse/rat bins
 cat CommonMouse.fa/*.fa > CommonMouse.fasta
 cat CommonRat.fa/*.fa > CommonRat.fasta
 cat StrainMouse.fa/*.fa > StrainMouse.fasta
@@ -43,3 +43,74 @@ cat StrainRat.fa/*.fa > StrainRat.fasta
 # STEP 7
 # send all four fastas from step 6 to orthoMCL
 # http://www.orthomcl.org/orthomcl/proteomeUpload.do
+
+# STEP 8
+# Concat all dna-fasta's within the common/strain/mouse/rat bins
+for i in ../analysis30June2015/CommonMouse.fa/*.fa; do sed "s/>/>$(basename $i | sed 's/.fa//')_/" $i; done > CommonMouse.fa
+for i in ../analysis30June2015/CommonRat.fa/*.fa; do sed "s/>/>$(basename $i | sed 's/.fa//')_/" $i; done > CommonRat.fa
+for i in ../analysis30June2015/StrainMouse.fa/*.fa; do sed "s/>/>$(basename $i | sed 's/.fa//')_/" $i; done > StrainMouse.fa
+for i in ../analysis30June2015/CommonRat.fa/*.fa; do sed "s/>/>$(basename $i | sed 's/.fa//')_/" $i; done > StrainRat.fa
+
+# STEP 9
+# CD-hit clustering of DNA-sequences with the 4 bins
+ls -d -1 $PWD/*.fa | parallel -j 10 '/home/robin/bin/cd-hit-v4.5.4-2011-03-07/cd-hit-est -i {} -o $(echo {} | sed 's/.fa/.cdhit/') -g 1'
+
+# STEP 10
+# Downloaded files from orthoMCl and used orthologGroups
+# Get ortho-genes for panther
+for i in *.txt; do awk '{print $3}' $i | sed $'s/|/\t/' | awk '{print $2}' > $(echo $i | sed 's/.txt/.orthoLST/'); done
+# Get ortho-animals for pie-chart
+for i in *.txt; do echo $i;  awk '{print $3}' $i | sed $'s/|/\t/' | awk '{print $1}' | sort | uniq -c | awk '$1 > 3 {print}' | sort -k1,1 -n; done
+
+
+# Step 11
+# Make figure 5
+# Header
+echo $'ID\tCR.RM\tCM.RM\tSR.RM\tSM.RM\tCR\tCM\tSR\tSM\tCR.P\tCM.P\tSR.P\tSM.P'  > fig5.raw ; \
+for i in CommonRat.fa/*; do echo $(basename $i) > id.tmp; \
+# #bases N
+seqtk comp $i |  awk '{print ($2-($3+$4+$5+$6))}' |  awk '{ sum+=$1} END {print sum+1}' | awk '{print $1-1}' > CRr.tmp; \
+seqtk comp $(echo $i| sed 's/Rat/Mouse/') |  awk '{print ($2-($3+$4+$5+$6))}' |  awk '{ sum+=$1} END {print sum+1}' | awk '{print $1-1}' > CMr.tmp; \
+seqtk comp $(echo $i| sed 's/Common/Strain/') |  awk '{print ($2-($3+$4+$5+$6))}' |  awk '{ sum+=$1} END {print sum+1}' | awk '{print $1-1}' > SRr.tmp; \
+seqtk comp $(echo $i| sed 's/Rat/Mouse/'| sed 's/Common/Strain/') |  awk '{print ($2-($3+$4+$5+$6))}' |  awk '{ sum+=$1} END {print sum+1}' | awk '{print $1-1}' > SMr.tmp; \
+# #bases -N
+seqtk comp $i |  awk '{print $2-(($2-($3+$4+$5+$6)))}' |  awk '{ sum+=$1} END {print sum+1}' | awk '{print $1-1}' > CR.tmp; \
+seqtk comp $(echo $i| sed 's/Rat/Mouse/') |  awk '{print $2-(($2-($3+$4+$5+$6)))}' |  awk '{ sum+=$1} END {print sum+1}' | awk '{print $1-1}' > CM.tmp; \
+seqtk comp $(echo $i| sed 's/Common/Strain/') |  awk '{print $2-(($2-($3+$4+$5+$6)))}' |  awk '{ sum+=$1} END {print sum+1}' | awk '{print $1-1}' > SR.tmp; \
+seqtk comp $(echo $i| sed 's/Rat/Mouse/'| sed 's/Common/Strain/') |  awk '{print $2-(($2-($3+$4+$5+$6)))}' |  awk '{ sum+=$1} END {print sum+1}' | awk '{print $1-1}' > SM.tmp; \
+# total length coding sequences
+grep 'Length protein-coding' $(echo $i | sed 's$^$augustus/$'| sed 's/.fa$/.stats/') |                        grep 'seqs' | grep 'Sum' | awk '{print $5}' > CRp.tmp ;\
+grep 'Length protein-coding' $(echo $i | sed 's$^$augustus/$'  | sed 's/Rat/Mouse/'| sed 's/.fa$/.stats/') |  grep 'seqs' | grep 'Sum' | awk '{print $5}' > CMp.tmp ;\
+grep 'Length protein-coding' $(echo $i | sed 's$^$augustus/$'  | sed 's/Common/Strain/'| sed 's/.fa$/.stats/') | grep 'seqs' | grep 'Sum' | awk '{print $5}' > SRp.tmp ;\
+grep 'Length protein-coding' $(echo $i | sed 's$^$augustus/$'   | sed 's/Rat/Mouse/'| sed 's/Common/Strain/'| sed 's/.fa$/.stats/') | grep 'seqs' | grep 'Sum' | awk '{print $5}' > SMp.tmp ;\
+paste id.tmp CRr.tmp CMr.tmp SRr.tmp SMr.tmp CR.tmp CM.tmp SR.tmp SM.tmp CRp.tmp CMp.tmp SRp.tmp SMp.tmp >> fig5.raw; done; rm *.tmp
+awk 'NR < 2' fig5.raw | sed $'s/\t/ /g'> tmp; awk 'NR > 1 {print $1,$2,$3,$4,$5,($6-$10),($7-$11),($8-$12),($9-$13),$10,$11,$12,$13}' fig5.raw >> tmp; mv tmp fig5.raw
+# Step 12
+# R
+Strain <- filter(melt(fig5, id.vars = 'ID'), (variable == 'CM' | variable ==  'CM.RM' | variable == 'CM.P' | variable == 'CR' | variable ==  'CR.RM' | variable == 'CR.P') & ID != 'SBN_Ygl.fa')
+Common <- filter(melt(fig5, id.vars = 'ID'), (variable == 'CM' | variable ==  'CM.RM' | variable == 'CM.P' | variable == 'CR' | variable ==  'CR.RM' | variable == 'CR.P') & ID != 'SBN_Ygl.fa')
+library("ggplot2")
+
+library("reshape2")
+
+cbPalette <- c("#999999",  "#999999", "#56B4E9", "#009E73", "#F0E442", "#E69F00")
+
+ggplot(Strain, aes(value, x = ID, fill = variable, order=factor(variable)) ) +geom_bar(position = "fill", stat="identity") + scale_fill_manual(values=cbPalette) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + labs(x="Strains", y= "Percentage non-EVE{Celera} (0-1%)") + coord_flip()
+ggplot(Common, aes(value, x = ID, fill = variable, order=factor(variable)) ) + geom_bar(position = "fill", stat="identity") + scale_fill_manual(values=cbPalette) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + labs(x="Strains", y= "Percentage non-EVE{Celera} (0-1%)") + coord_flip()
+
+# Step 13
+# lengths of assemblies
+for i in Common.fasta/*; do seqtk comp $i | awk '{ sum+=$2} END { print sum}'; done > lenCommon.tt
+for i in Strain.fasta/*; do seqtk comp $i | awk '{ sum+=$2} END { print sum}'; done > lenStrain.tt
+
+
+
+
+
+
+
+
+
+
+
+... wachten op stap 9
