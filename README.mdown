@@ -6,3 +6,9 @@ Code for manuscript:
     * Divide contigs in strain-specific and common ones
     * Input: BLAT-psl files of all-vs-all contig-alignments
     * Output: contignames of strain-specific contig
+
+* mappingBasedFiltering.pl
+    * Map reads to the Celera-reference, Y-chromosomal BAC-contigs and contaminant-database
+    * Input: forward and reverse fastqs from unmapped reads
+    * Output: TripleDistilled.log (counts of filtered reads) and *de novo*-ready fastq
+    

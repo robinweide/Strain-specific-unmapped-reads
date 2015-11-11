@@ -103,14 +103,21 @@ ggplot(Common, aes(value, x = ID, fill = variable, order=factor(variable)) ) + g
 for i in Common.fasta/*; do seqtk comp $i | awk '{ sum+=$2} END { print sum}'; done > lenCommon.tt
 for i in Strain.fasta/*; do seqtk comp $i | awk '{ sum+=$2} END { print sum}'; done > lenStrain.tt
 
+# Step 14
+# Post-cdhit
+# extract fastas of clusters >= 3 seqs
+~/bin/cd-hit-v4.5.4-2011-03-07/make_multi_seq.pl CommonMouse.fa CommonMouse.cdhit.clstr CommonMouseClusterFasta 3
+~/bin/cd-hit-v4.5.4-2011-03-07/make_multi_seq.pl CommonRat.fa CommonRat.cdhit.clstr CommonRatClusterFasta 3
+
+# Concat common fastas in clusters: NM = Rat, MM = Mouse
+for file in CommonRatClusterFasta/*; do sed "s/>/>cluster_$(basename $file)-NM_/g" $file; done > commonClusters.fa
+for file in CommonMouseClusterFasta/*; do sed "s/>/>cluster_$(basename $file)-MM_/g" $file; done >> commonClusters.fa
 
 
 
-
-
-
-
-
-
-
-... wachten op stap 9
+#align with clustalo
+for entry in Common*ClusterFasta/*; do ~/bin/clustalo-1.2.0-Ubuntu-32-bit -i $entry --full-iter -o $(echo $entry | sed 's/Fasta/Consensus/') --outfmt=clu --force; done
+#Make profile
+~/bin/ANDES/ClustalALN_to_PositionProfile_ROBIN.pl -a CommonMouseClusterConsensus/0
+#Generate consensus-sequence
+perl ~/bin/ANDES/Profile_To_ConsensusFASTA.pl -c CommonMouseClusterConsensus/0.fasta -p CommonMouseClusterConsensus/0
