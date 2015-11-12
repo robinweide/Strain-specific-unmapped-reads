@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# input: sample_name	fq1		fq2	InsertSize
+# inputs: sample_name	fq1		fq2	InsertSize
 
 echo 1.fastq > reads.lst
 echo 2.fastq >> reads.lst
