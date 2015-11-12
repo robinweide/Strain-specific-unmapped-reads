@@ -25,4 +25,7 @@ Here, we provide some of the code used:
     * Input: BLAT-psl files of all-vs-all contig-alignments
     * Output: contignames of strain-specific contig
 
-1. postDenovoWork
+1. post-ContigSplitter_pipeline.sh
+    * Do all small analyses downstream of contig-splitting
+    * Input: Fasta's from ContigSplitter.ipynb
+    * Output: (counts of) predicted Proteins and Orthologs
