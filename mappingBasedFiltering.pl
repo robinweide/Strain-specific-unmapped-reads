@@ -91,24 +91,24 @@ foreach my $QUERY (@QUERY){
 # ######################################################################
 
         # map to celera in paired-end mode
-        `\/home\/robin\/bin\/bwa\-0\.7\.5a\/bwa mem \-M \-p \/data\_fedor12\/robin\/databases\/Celera\/Alt\_Rn\_Celera\.fa ST.fastq \> CeleraR\.sam`;
+        `\/bin\/bwa\-0\.7\.5a\/bwa mem \-M \-p Alt\_Rn\_Celera\.fa ST.fastq \> CeleraR\.sam`;
         # get reads, that properly map in pairs
         `samtools view \-bS \-f 2 CeleraR\.sam \> Celera\_proper\_mappedS\.bam`;
 
  		# map to y in paired-end mode
- 		`\/home\/robin\/bin\/bwa\-0\.7\.5a\/bwa mem \-M \-p \/data\_fedor12\/robin\/databases\/YchrBAC\/YchrBAC\.fasta ST.fastq \> YchrR\.sam`;
+ 		`\/bin\/bwa\-0\.7\.5a\/bwa mem \-M \-p YchrBAC\.fasta ST.fastq \> YchrR\.sam`;
         # get reads, that properly map in pairs
         `samtools view \-bS \-f 2 YchrR\.sam \> Ychr\_proper\_mappedS\.bam`;
 
 		# map against vipro-db
-        `\/home\/robin\/bin\/bwa\-0\.7\.5a\/bwa mem \-M \-p \/data\_fedor12\/robin\/databases\/ViPro\/ProVi\.fa ST.fastq \> VR\.sam`;
+        `\/bin\/bwa\-0\.7\.5a\/bwa mem \-M \-p ProVi\.fa ST.fastq \> VR\.sam`;
         # extract properly-mapped reads
         `samtools view \-bS \-f 2 VR\.sam \> V\_proper\_mappedS\.bam`;
 
 
-	`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/MergeSamFiles\.jar INPUT\=Celera\_proper\_mappedR\.bam INPUT\=Celera\_proper\_mappedS\.bam OUTPUT\=Celera\_proper\_mapped\.bam SORT\_ORDER\=queryname`;
-	`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/MergeSamFiles\.jar INPUT\=Ychr\_proper\_mappedS\.bam INPUT\=Ychr\_proper\_mappedR\.bam  OUTPUT\=Ychr\_proper\_mapped\.bam SORT\_ORDER\=queryname`;
-	`java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/MergeSamFiles\.jar INPUT\=V\_proper\_mappedS\.bam INPUT\=V\_proper\_mappedR\.bam  OUTPUT\=V\_proper\_mapped\.bam SORT\_ORDER\=queryname`;
+	`java \-Xmx2g \-jar \/picard\-tools\-1\.109\/MergeSamFiles\.jar INPUT\=Celera\_proper\_mappedR\.bam INPUT\=Celera\_proper\_mappedS\.bam OUTPUT\=Celera\_proper\_mapped\.bam SORT\_ORDER\=queryname`;
+	`java \-Xmx2g \-jar \/picard\-tools\-1\.109\/MergeSamFiles\.jar INPUT\=Ychr\_proper\_mappedS\.bam INPUT\=Ychr\_proper\_mappedR\.bam  OUTPUT\=Ychr\_proper\_mapped\.bam SORT\_ORDER\=queryname`;
+	`java \-Xmx2g \-jar \/picard\-tools\-1\.109\/MergeSamFiles\.jar INPUT\=V\_proper\_mappedS\.bam INPUT\=V\_proper\_mappedR\.bam  OUTPUT\=V\_proper\_mapped\.bam SORT\_ORDER\=queryname`;
 
 
 
@@ -156,14 +156,14 @@ foreach my $QUERY (@QUERY){
         #get fastq of remaining reads
         `seqtk subseq ready\_for\_celera\_mapping1\.fastq nonono\.lst \> NoNoNo1\.fastq`;
 		`seqtk subseq ready\_for\_celera\_mapping2\.fastq nonono\.lst \> NoNoNo2\.fastq`;
-         `perl \/home\/robin\/bin\/AddPairedEndSuffix\.pl NoNoNo1\.fastq NoNoNo1suf\.fastq 1`;
-         `perl \/home\/robin\/bin\/AddPairedEndSuffix\.pl NoNoNo2\.fastq NoNoNo2suf\.fastq 2`;
+         `perl \/bin\/AddPairedEndSuffix\.pl NoNoNo1\.fastq NoNoNo1suf\.fastq 1`;
+         `perl \/bin\/AddPairedEndSuffix\.pl NoNoNo2\.fastq NoNoNo2suf\.fastq 2`;
 
-    `java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=NoNoNo1suf\.fastq OUTPUT\=NoNoNo1suf\.sam SAMPLE\_NAME\=$values[3]`;
-    `java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=NoNoNo2suf\.fastq OUTPUT\=NoNoNo2suf\.sam SAMPLE\_NAME\=$values[3]`;
-    `java \-Xmx2g \-jar \/data\_fedor12\/common\_scripts\/picard\/picard\-tools\-1\.109\/MergeSamFiles\.jar INPUT\=NoNoNo1suf\.sam INPUT\=NoNoNo2suf\.sam  OUTPUT\=MERGEDno\.sam SORT\_ORDER\=queryname`;
-    `perl \/home\/robin\/bin\/UnmappedBamToFastq\.pl MERGEDno\.sam $values[3]\_TripleDistilled`;
-    `python /home/robin/bin/InterleaveFastq.py -l $values[3]\_TripleDistilled\_1\.fastq -r $values[3]\_TripleDistilled\_2\.fastq -o READY\_FOR\_DENOVO\_RP\.fastq`;
+    `java \-Xmx2g \-jar \/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=NoNoNo1suf\.fastq OUTPUT\=NoNoNo1suf\.sam SAMPLE\_NAME\=$values[3]`;
+    `java \-Xmx2g \-jar \/picard\-tools\-1\.109\/FastqToSam\.jar FASTQ\=NoNoNo2suf\.fastq OUTPUT\=NoNoNo2suf\.sam SAMPLE\_NAME\=$values[3]`;
+    `java \-Xmx2g \-jar \/picard\-tools\-1\.109\/MergeSamFiles\.jar INPUT\=NoNoNo1suf\.sam INPUT\=NoNoNo2suf\.sam  OUTPUT\=MERGEDno\.sam SORT\_ORDER\=queryname`;
+    `perl \/bin\/UnmappedBamToFastq\.pl MERGEDno\.sam $values[3]\_TripleDistilled`;
+    `python /bin/InterleaveFastq.py -l $values[3]\_TripleDistilled\_1\.fastq -r $values[3]\_TripleDistilled\_2\.fastq -o READY\_FOR\_DENOVO\_RP\.fastq`;
     `mv $values[3]\_TripleDistilled\.fastq READY\_FOR\_DENOVO\_ST\.fastq`;
 
 
