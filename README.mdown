@@ -1,14 +1,14 @@
 # The scrapheap challenge:
 ## Extracting relevant biological information, including strain-specific genomic segments, from unmapped NGS-reads.
 
-Code for manuscript:
-* ContigSplitter.ipynb
-    * Divide contigs in strain-specific and common ones
-    * Input: BLAT-psl files of all-vs-all contig-alignments
-    * Output: contignames of strain-specific contig
+The methods described in out paper can be split in multiple sections:
 
-* mappingBasedFiltering.pl
+1 mappingBasedFiltering.pl
     * Map reads to the Celera-reference, Y-chromosomal BAC-contigs and contaminant-database
     * Input: forward and reverse fastqs from unmapped reads
     * Output: TripleDistilled.log (counts of filtered reads) and *de novo*-ready fastq
-    
+
+2 ContigSplitter.ipynb
+    * Divide contigs in strain-specific and common ones
+    * Input: BLAT-psl files of all-vs-all contig-alignments
+    * Output: contignames of strain-specific contig
