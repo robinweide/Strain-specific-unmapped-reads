@@ -1,13 +1,13 @@
 # The scrapheap challenge:
 ## Extracting relevant biological information, including strain-specific genomic segments, from unmapped NGS-reads.
 
-The re-mapping and filtering proccess constitutes multiple processes, in this repository we provide the code used.
+The re-mapping and filtering process constitutes multiple processes, in this repository we provide the code used.
 Third party software used in these analysis are;
-* SOAPdenovo v2.04 []
-* compareads v2.1.1 []
-* samtools v1.1 []
-* bedtools v2.25 []
-* picard v1.14 []
+* SOAPdenovo v2.04
+* compareads v2.1.1
+* samtools v1.1
+* bedtools v2.25
+* picard v1.14
 
 Custom wrapper and annotation scripts:
 1. mappingBasedFiltering.pl
